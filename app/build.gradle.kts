@@ -37,6 +37,11 @@ android {
 
 dependencies {
 
+    implementation(libs.retrofit)
+    implementation(libs.gson)
+    implementation(libs.okHttp)
+    implementation(libs.interceptor)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
