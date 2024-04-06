@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">testTaskAvito</string>
+    <string name="defaultString">НЕТ ДАННЫХ</string>
 </resources>
