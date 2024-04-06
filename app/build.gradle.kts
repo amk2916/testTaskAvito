@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.okHttp)
     implementation(libs.interceptor)
+    implementation(libs.pagging)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
