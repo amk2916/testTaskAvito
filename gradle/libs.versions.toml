@@ -14,6 +14,7 @@ okhttpVersion = "4.12.0"
 paggingVersion = "3.2.1"
 daggerVersion = "2.51.1"
 kaptVersion = "1.9.23"
+picassoVersion = "2.8"
 
 
 [libraries]
@@ -27,6 +28,8 @@ pagging = { group = "androidx.paging", name = "paging-runtime", version.ref = "p
 
 dagger = { group = "com.google.dagger", name = "dagger", version.ref = "daggerVersion"}
 daggerCompiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "daggerVersion"}
+
+picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picassoVersion"}
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
