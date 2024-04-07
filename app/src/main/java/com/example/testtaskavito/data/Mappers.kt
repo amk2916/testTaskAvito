@@ -10,6 +10,7 @@ fun Docs.toMovieForList() : MovieForList{
         year = year ?: 0,
         ageCategory = ageRating ?: 0,
 //        shortDescription = shortDescription?:"-",
-        rating = "КП:${rating?.kp ?: "-"}/IMDB:${rating?.imdb ?: "-"}"
+        //rating = "КП:${rating?.kp ?: "-"}/IMDB:${rating?.imdb ?: "-"}"
+        rating = rating?.kp.toString()
     )
 }

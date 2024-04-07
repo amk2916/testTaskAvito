@@ -21,7 +21,7 @@ class MoviesPageSource @Inject constructor(
 
         val page: Int = params.key ?: 1
 
-        val pageSize: Int = params.loadSize.coerceAtMost(50)
+        val pageSize: Int = params.loadSize.coerceAtMost(15)
 
         val response = apiService.getListFilm(page, pageSize)
 

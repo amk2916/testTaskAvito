@@ -1,7 +1,7 @@
 package com.example.testtaskavito.domain
 
 data class Rating(
-    val kp: Int?,
+    val kp: Float?,
     val imdb: Float?,
     val tmdb: Float?,
     val filmCritics: Float?,
