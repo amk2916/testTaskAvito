@@ -7,7 +7,9 @@ import dagger.Component
 
 @ApplicationScope
 @Component(modules = [
-    InternetModule::class
+    InternetModule::class,
+    ViewModelModule::class,
+    RepositoryModule::class
 ])
 interface AppComponent {
     fun inject(mainActivity: MainActivity)

@@ -3,7 +3,9 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    alias(libs.plugins.kapt)
+    //alias(libs.plugins.kapt)
+    alias(libs.plugins.ksp)
+
 }
 
 android {
@@ -51,8 +53,8 @@ dependencies {
     implementation(libs.pagging)
     implementation(libs.picasso)
     implementation(libs.dagger)
-    annotationProcessor(libs.daggerCompiler)
-
+    ksp(libs.daggerCompiler)
+  //  annotationProcessor(libs.daggerCompiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

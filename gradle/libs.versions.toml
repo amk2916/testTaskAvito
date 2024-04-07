@@ -12,9 +12,11 @@ constraintlayout = "2.1.4"
 retrofitVersion = "2.11.0"
 okhttpVersion = "4.12.0"
 paggingVersion = "3.2.1"
-daggerVersion = "2.51.1"
+daggerVersion = "2.48"
 kaptVersion = "1.9.23"
-picassoVersion = "2.8"
+picassoVersion = "2.71828"
+kspVersion = "1.9.0-1.0.12"
+
 
 
 [libraries]
@@ -44,4 +46,5 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kapt = { id  = "org.jetbrains.kotlin.kapt", version.ref = "kaptVersion"}
+ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion"}
 
