@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.kapt)
 }
 
 android {
@@ -42,6 +43,10 @@ dependencies {
     implementation(libs.okHttp)
     implementation(libs.interceptor)
     implementation(libs.pagging)
+    implementation(libs.picasso)
+    implementation(libs.dagger)
+    annotationProcessor(libs.daggerCompiler)
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
