@@ -4,8 +4,9 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.testtaskavito.domain.MovieForList
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class MoviesPageSource(
+class MoviesPageSource @Inject constructor(
     private val apiService: MoviesService
 ) : PagingSource<Int, MovieForList>() {
     override fun getRefreshKey(state: PagingState<Int, MovieForList>): Int? {

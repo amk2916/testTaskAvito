@@ -1,6 +1,11 @@
 package com.example.testtaskavito.domain
 
-class GetMoviesUseCase {
+import androidx.paging.PagingSource
+import javax.inject.Inject
+
+class GetMoviesUseCase @Inject constructor(
+    private val repository: Repository
+) {
 
     /**
      * если есть доступ к сети запрос уходит в сеть,
@@ -19,5 +24,9 @@ class GetMoviesUseCase {
 
     fun getMovieForID(idServer: Long?, idLocal: Long?): Movie{
         TODO()
+    }
+
+    fun getMovies() : PagingSource<Int, MovieForList>{
+        return repository.getMovies()
     }
 }
