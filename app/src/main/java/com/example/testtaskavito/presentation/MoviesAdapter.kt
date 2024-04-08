@@ -69,7 +69,7 @@ class MoviesAdapter(
 
         val itemView = LayoutInflater
             .from(parent.context)
-            .inflate(R.layout.movies_item, parent, false)
+            .inflate(R.layout.movies_list_item_model, parent, false)
 
         return MoviesViewHolder(itemView)
     }
