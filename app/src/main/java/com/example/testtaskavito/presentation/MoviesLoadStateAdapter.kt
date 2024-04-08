@@ -53,9 +53,10 @@ class MoviesLoadStateAdapter : LoadStateAdapter<MoviesLoadStateAdapter.ItemViewH
     ) : ItemViewHolder(view) {
 
         override fun bind(loadState: LoadState) {
-            require(loadState is LoadState.Error)
-            val errorMessage = view.findViewById<TextView>(R.id.error_message)
-            errorMessage.text = loadState.error.localizedMessage
+            if (loadState is LoadState.Error) {
+                val errorMessage = view.findViewById<TextView>(R.id.error_message)
+                errorMessage.text = loadState.error.localizedMessage
+            }
         }
 
     }

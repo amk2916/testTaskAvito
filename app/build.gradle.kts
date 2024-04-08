@@ -1,7 +1,11 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    alias(libs.plugins.kapt)
+    //alias(libs.plugins.kapt)
+    alias(libs.plugins.ksp)
+
 }
 
 android {
@@ -16,6 +20,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val  properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+        resValue("string", "api_key",properties.getProperty("api_key", ""))
     }
 
     buildTypes {
@@ -45,8 +53,8 @@ dependencies {
     implementation(libs.pagging)
     implementation(libs.picasso)
     implementation(libs.dagger)
-    annotationProcessor(libs.daggerCompiler)
-
+    ksp(libs.daggerCompiler)
+  //  annotationProcessor(libs.daggerCompiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
