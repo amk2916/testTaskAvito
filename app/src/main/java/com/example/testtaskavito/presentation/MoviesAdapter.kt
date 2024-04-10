@@ -24,6 +24,8 @@ class MoviesAdapter(
         displayMetrics
     )
 
+    val onClickListenerItem: ((MovieForList) -> Unit)? = null
+
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         val movieItem = getItem(position)
         val poster = movieItem?.poster
@@ -63,6 +65,12 @@ class MoviesAdapter(
         }
         holder.nameFilm.text = movieItem?.name ?: R.string.defaultString.toString()
         holder.yearFilm.text = year
+
+        holder.card.setOnClickListener {
+            movieItem?.let {
+                onClickListenerItem?.invoke(it)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
