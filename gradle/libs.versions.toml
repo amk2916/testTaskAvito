@@ -18,6 +18,7 @@ picassoVersion = "2.71828"
 kspVersion = "1.9.0-1.0.12"
 viewModelVersion = "2.7.0"
 coroutinesVersion = "1.7.1"
+roomVersion = "2.6.1"
 
 
 [libraries]
@@ -40,6 +41,11 @@ viewModelRKTX = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", 
 
 coroutinesCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutinesVersion"}
 coroutinesAndroid = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutinesVersion"}
+
+room = {group = "androidx.room", name = "room-runtime", version.ref = "roomVersion"}
+roomCompiler = {group = "androidx.room", name = "room-compiler", version.ref = "roomVersion"}
+roomCoroutines = {group = "androidx.room", name = "room-ktx", version.ref = "roomVersion"}
+roomPaging = {group = "androidx.room", name = "room-paging", version.ref = "roomVersion"}
 
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
