@@ -18,6 +18,7 @@ import com.example.testtaskavito.R
 import com.example.testtaskavito.presentation.MoviesAdapter
 import com.example.testtaskavito.presentation.MoviesLoadStateAdapter
 import com.example.testtaskavito.presentation.ViewModelFactory
+import com.example.testtaskavito.presentation.secondScreen.SecondScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -70,6 +71,8 @@ class MoviesListFragment : Fragment() {
 
 
 
+
+
     }
 
 
@@ -78,6 +81,14 @@ class MoviesListFragment : Fragment() {
         val displayMetrics = resources.displayMetrics
 
         moviesAdapter = MoviesAdapter(displayMetrics, dimenCornerRatingTV)
+        moviesAdapter.onClickListenerItem = {
+            val fragment = SecondScreen.instance(it.id)
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, fragment)
+                .addToBackStack("")
+                .commit()
+        }
         recyclerView.adapter = moviesAdapter.withLoadStateHeaderAndFooter(
             footer = MoviesLoadStateAdapter(),
             header = MoviesLoadStateAdapter()

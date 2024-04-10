@@ -20,7 +20,7 @@ fun Docs.toMovieForList() : MovieForList{
     )
 }
 
-fun MovieItemDocs.toMovie() : Movie{
+fun MovieModelItem.toMovie() : Movie{
     return Movie(
         idFilm = id ?: 0,
         nameFilm = name ?:"",

@@ -1,0 +1,26 @@
+package com.example.testtaskavito.presentation.secondScreen
+
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import com.example.testtaskavito.domain.GetMoviesUseCase
+import com.example.testtaskavito.domain.Movie
+import kotlinx.coroutines.flow.MutableSharedFlow
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+class MovieItemViewModel @Inject constructor(
+    private val queryGetMoviesUseCaseProvider: GetMoviesUseCase
+) : ViewModel(){
+
+    val movie = MutableSharedFlow<Movie>(0)
+    fun getMovie(id: Int){
+        viewModelScope.launch {
+            val movie1 =  queryGetMoviesUseCaseProvider.getMovieForID(id)
+            Log.e("emit", movie1.toString())
+            movie.emit(
+               movie1!!
+            )
+        }
+    }
+}

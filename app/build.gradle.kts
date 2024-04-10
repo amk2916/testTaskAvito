@@ -54,7 +54,13 @@ dependencies {
     implementation(libs.picasso)
     implementation(libs.dagger)
     ksp(libs.daggerCompiler)
+    implementation(libs.viewModel)
+    implementation(libs.viewModelRKTX)
+    implementation(libs.coroutinesCore)
+    implementation(libs.coroutinesAndroid)
   //  annotationProcessor(libs.daggerCompiler)
+
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -24,7 +24,7 @@ class MoviesAdapter(
         displayMetrics
     )
 
-    val onClickListenerItem: ((MovieForList) -> Unit)? = null
+    var onClickListenerItem: ((MovieForList) -> Unit)? = null
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         val movieItem = getItem(position)

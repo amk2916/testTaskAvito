@@ -22,8 +22,8 @@ class GetMoviesUseCase @Inject constructor(
         TODO()
     }
 
-    fun getMovieForID(idServer: Long?, idLocal: Long?): Movie{
-        TODO()
+    suspend fun getMovieForID(idServer: Int?/*, idLocal: Long?*/): Movie?{
+        return repository.getMovieForID(idServer)
     }
 
     fun getMovies() : PagingSource<Int, MovieForList>{
