@@ -16,7 +16,8 @@ daggerVersion = "2.48"
 kaptVersion = "1.9.23"
 picassoVersion = "2.71828"
 kspVersion = "1.9.0-1.0.12"
-
+viewModelVersion = "2.7.0"
+coroutinesVersion = "1.7.1"
 
 
 [libraries]
@@ -32,6 +33,14 @@ dagger = { group = "com.google.dagger", name = "dagger", version.ref = "daggerVe
 daggerCompiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "daggerVersion"}
 
 picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picassoVersion"}
+
+viewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "viewModelVersion"}
+viewModelRKTX = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "viewModelVersion"}
+
+
+coroutinesCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutinesVersion"}
+coroutinesAndroid = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutinesVersion"}
+
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

@@ -1,4 +1,4 @@
-package com.example.testtaskavito.di
+package com.example.testtaskavito.di.module
 
 import android.app.Application
 import com.example.testtaskavito.R

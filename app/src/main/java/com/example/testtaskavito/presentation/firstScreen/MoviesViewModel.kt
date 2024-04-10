@@ -1,4 +1,4 @@
-package com.example.testtaskavito.presentation
+package com.example.testtaskavito.presentation.firstScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

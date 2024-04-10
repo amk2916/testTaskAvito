@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
-        tools:listitem="@layout/movies_item"
+        tools:listitem="@layout/movies_list_item_model"
         android:visibility="visible"/>
 
     <ProgressBar

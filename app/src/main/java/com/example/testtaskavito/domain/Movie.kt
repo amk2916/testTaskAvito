@@ -16,16 +16,17 @@ package com.example.testtaskavito.domain
  *  countSeasons - количество сезонов (если это сериал)
  */
 data class Movie(
-    val idLocal: Long?,
-    val idFilm: Long,
+   // val idLocal: Long?,
+    val idFilm: Int,
     val nameFilm: String,
     val description: String,
     val rating: Rating,
-    val reviews: List<Review>,
+   // val reviews: List<Review>,
     val posters: String,
     val yearFilm: Int,
-    val countryFilm: Int,
-    val typeFilms: Int,
-    val actors: List<String>,
-    val countSeasons: Int?,
+   // val countryFilm: Int,
+    //val typeFilms: Int,
+    //val actors: List<String>,
+    //val countSeasons: Int?,
+    val movieLength: String
 )

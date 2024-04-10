@@ -1,10 +1,10 @@
 package com.example.testtaskavito.domain
 
 data class Rating(
-    val kp: Float?,
-    val imdb: Float?,
-    val tmdb: Float?,
-    val filmCritics: Float?,
-    val russianFilmCritics: Float?,
-    val await: Float?
+    val kp: Float? = null,
+    val imdb: Float? = null,
+    val tmdb: Float? = null,
+    val filmCritics: Float? = null,
+    val russianFilmCritics: Float? = null,
+    val await: Float? = null
 )

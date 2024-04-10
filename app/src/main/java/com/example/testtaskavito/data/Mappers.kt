@@ -1,5 +1,6 @@
 package com.example.testtaskavito.data
 
+import com.example.testtaskavito.domain.Movie
 import com.example.testtaskavito.domain.MovieForList
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -16,5 +17,17 @@ fun Docs.toMovieForList() : MovieForList{
 //        shortDescription = shortDescription?:"-",
         //rating = "КП:${rating?.kp ?: "-"}/IMDB:${rating?.imdb ?: "-"}"
         rating =finalRating
+    )
+}
+
+fun MovieModelItem.toMovie() : Movie{
+    return Movie(
+        idFilm = id ?: 0,
+        nameFilm = name ?:"",
+        description = description ?: "",
+        rating = rating,
+        posters = poster.url ?: "",
+        yearFilm = year ?: 0,
+        movieLength = movieLength?.toString() ?: "0"
     )
 }
