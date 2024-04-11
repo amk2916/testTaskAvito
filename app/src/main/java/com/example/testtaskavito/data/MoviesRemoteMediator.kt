@@ -37,7 +37,11 @@ class MoviesRemoteMediator @Inject constructor(
                 }
                 LoadType.APPEND -> {
                     try {
-                        val nextPage = state.pages.size + 1
+                        val Page = state.lastItemOrNull()?.page
+                            ?: 0
+
+
+                        val nextPage = Page +1
                         Log.e("nextPage", nextPage.toString())
                         val pageSize = state.config.pageSize
                         val response = apiService.getListFilm(nextPage, pageSize)

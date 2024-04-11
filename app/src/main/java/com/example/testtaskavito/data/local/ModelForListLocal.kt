@@ -1,6 +1,7 @@
 package com.example.testtaskavito.data.local
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import androidx.room.TypeConverter
@@ -9,7 +10,16 @@ import com.example.testtaskavito.data.Picture
 import com.example.testtaskavito.domain.Rating
 import com.google.gson.Gson
 
-@Entity("cache_movie_list_model")
+@Entity(
+    tableName = "cache_movie_list_model",
+    indices = [
+        Index(
+            value = ["id"],
+            unique = true
+        )
+    ]
+
+)
 data class ModelForListLocal(
     @PrimaryKey(autoGenerate = true)
     var idLocal: Int = 0,

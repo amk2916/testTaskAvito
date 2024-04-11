@@ -23,7 +23,7 @@ class RepositoryImpl @Inject constructor(
 
     override fun getMovies(): Flow<PagingData<ModelForListLocal>> {
         return Pager(
-            config = PagingConfig(pageSize = 20),
+            config = PagingConfig(pageSize = 16),
             remoteMediator = moviesRemoteMediator,
             pagingSourceFactory = { movieDao.getAllMovies() }
         ).flow
