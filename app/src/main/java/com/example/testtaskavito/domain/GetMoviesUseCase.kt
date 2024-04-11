@@ -29,7 +29,11 @@ class GetMoviesUseCase @Inject constructor(
         return repository.getMovieForID(idServer)
     }
 
-    fun getMovies() : Flow<PagingData<ModelForListLocal>> {
-        return repository.getMovies()
+    fun getMovies(
+        countryName: String? = null ,
+        year: Int? =null,
+        ageRating: Int? = null
+    ) : Flow<PagingData<ModelForListLocal>> {
+        return repository.getMovies(countryName,year , ageRating)
     }
 }

@@ -12,6 +12,9 @@ interface MoviesService {
     suspend fun getListFilm(
         @Query("page") @IntRange(from = 1) page: Int = 1,
         @Query("limit") @IntRange(from = 1, to = 10) limit: Int = 10,
+        @Query("countries.name") countryName: String? = null,
+        @Query("year") year: Int? =  null,
+        @Query("ageRating") ageRating: Int? = null
       //  @Query("countries.name") name: String
     ): Response<MovieModel>
 
@@ -19,4 +22,7 @@ interface MoviesService {
     suspend fun getFilmForId(
         @Path("id") id: Int
     ) : Response<MovieModelItem>
+
+
+
 }

@@ -19,10 +19,6 @@ import java.util.concurrent.TimeUnit
 @Module
 class InternetModule {
 
-
-    @Provides
-    fun providesBaseURL() = "https://api.kinopoisk.dev/"
-
     @Provides
     fun providesOkHttp(application: Application): OkHttpClient {
         val token = application.resources.getString(R.string.api_key)

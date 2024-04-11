@@ -13,7 +13,12 @@ import javax.inject.Inject
 @OptIn(ExperimentalPagingApi::class)
 class MoviesRemoteMediator @Inject constructor(
     private val apiService: MoviesService,
-    private val movieDao: MoviesListDao
+    private val movieDao: MoviesListDao,
+
+    private val nameCountry: String? = null,
+    private val year: Int? = null,
+    private val ageRating: Int? = null
+
 ) : RemoteMediator<Int, ModelForListLocal>() {
     override suspend fun load(
         loadType: LoadType,
@@ -24,16 +29,6 @@ class MoviesRemoteMediator @Inject constructor(
                 LoadType.REFRESH -> 1
                 LoadType.PREPEND -> {
                     return MediatorResult.Success(endOfPaginationReached = true)
-
-//                    // В этом случае вы можете реализовать логику для загрузки предыдущих страниц,
-//                    // если это необходимо
-//                    val firstItem = state.firstItemOrNull()
-//                    val prevKey = firstItem?.id ?: return MediatorResult.Success(endOfPaginationReached = true)
-//                    val currentPage = state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.first()?.id ?: 1
-//                    val prevPage = if (prevKey > 1) currentPage - 1 else null
-//                    // В этом месте вы можете использовать prevPage для загрузки предыдущей страницы данных
-//                    // ...
-//                    return MediatorResult.Success(endOfPaginationReached = prevPage == null)
                 }
                 LoadType.APPEND -> {
                     try {
@@ -44,7 +39,7 @@ class MoviesRemoteMediator @Inject constructor(
                         val nextPage = Page +1
                         Log.e("nextPage", nextPage.toString())
                         val pageSize = state.config.pageSize
-                        val response = apiService.getListFilm(nextPage, pageSize)
+                        val response = apiService.getListFilm(nextPage, pageSize, nameCountry, year, ageRating)
 
                         if (response.isSuccessful) {
                             val movies = response.body()?.docs?.map { it.toCachedMovie(nextPage) } ?: emptyList()
@@ -60,36 +55,11 @@ class MoviesRemoteMediator @Inject constructor(
                         Broacast.pushError(exception.toString())
                         return MediatorResult.Error(exception)
                     }
-//                    val next = state.pages.size
-//                    if(state.firstItemOrNull()==null||next < 15  ) {
-//                        return MediatorResult.Success(endOfPaginationReached = true)
-//                    } else {
-//                        state.firstItemOrNull()!!.page + 1
-//                    }
-//                    val page =  state.closestPageToPosition(state.firstItemOrNull()?.id?:0)
-//                    val newPage = page?.nextKey
-//                    val prevKey = page?.prevKey
-//                    Log.e("newPage", newPage.toString())
-//                    Log.e("prevKey", prevKey.toString())
-//                    if(newPage==null) {
-//
-//                        return MediatorResult.Success(endOfPaginationReached = true)
-//                    }else{
-//                        newPage+1
-//                    }
-//                    // В этом случае вы можете реализовать логику для загрузки следующих страниц,
-//                    // если это необходимо
-//                    val lastItem = state.lastItemOrNull()
-//                    val page = state.pages.firstOrNull{
-//                        it.data.first()
-//                    }
-//                    val nextPage = lastItem?.id ?: return MediatorResult.Success(endOfPaginationReached = true)
-//                    nextPage + 1
                 }
             }
 
             val pageSize = state.config.pageSize
-            val response = apiService.getListFilm(page, pageSize)
+            val response = apiService.getListFilm(page, pageSize,  nameCountry, year, ageRating)
 
             if (response.isSuccessful) {
                 val movies = response.body()?.docs?.map { it.toCachedMovie(page) } ?: emptyList()

@@ -11,8 +11,8 @@ interface MoviesListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(movies: List<ModelForListLocal>)
 
-    @Query("SELECT * FROM cache_movie_list_model")
-    fun getAllMovies(): PagingSource<Int, ModelForListLocal>
+//    @Query("SELECT * FROM cache_movie_list_model")
+//    fun getAllMovies(): PagingSource<Int, ModelForListLocal>
 
     @Query("DELETE FROM cache_movie_list_model")
     suspend fun clearMovies()
@@ -24,6 +24,6 @@ interface MoviesListDao {
     AND (:ageRating IS NULL OR ageRating = :ageRating)
     AND (:country IS NULL OR UPPER(country) LIKE UPPER('%' || :country || '%'))
     """)
-    suspend fun getMovieWithFilter(country: String?, ageRating: Int?, year: Int?): ModelForListLocal
+    fun getAllMovies(country: String?= null, ageRating: Int? = null, year: Int? =null): PagingSource<Int, ModelForListLocal>
 
 }

@@ -15,22 +15,38 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 class RepositoryImpl @Inject constructor(
-    //private val moviesPageSource: MoviesPageSource,
     private val moviesService: MoviesService,
-    private val moviesRemoteMediator: MoviesRemoteMediator,
     private val movieDao: MoviesListDao
 ) : Repository {
 
-    override fun getMovies(): Flow<PagingData<ModelForListLocal>> {
+    private fun createMoviesRemoteMediator(
+        countryName: String? = null,
+        year: Int? = null,
+        ageRating: Int? = null
+    ): MoviesRemoteMediator {
+        return MoviesRemoteMediator(
+            apiService = moviesService,
+            movieDao = movieDao,
+            nameCountry  = countryName,
+            year = year,
+            ageRating = ageRating
+        )
+    }
+
+    override fun getMovies(
+        countryName: String?,
+        year: Int?,
+        ageRating: Int?
+    ): Flow<PagingData<ModelForListLocal>> {
+        val moviesRemoteMediator = createMoviesRemoteMediator(countryName, year, ageRating)
         return Pager(
             config = PagingConfig(pageSize = 16),
             remoteMediator = moviesRemoteMediator,
-            pagingSourceFactory = { movieDao.getAllMovies() }
+            pagingSourceFactory = {
+                movieDao.getAllMovies(countryName, year, ageRating)
+            }
         ).flow
     }
-//    override fun getMovies(): PagingSource<Int, MovieForList> {
-//        return moviesPageSource
-//    }
 
     override suspend fun getMovieForID(idServer: Int?): Movie? {
         return moviesService.getFilmForId(idServer!!).body()?.toMovie()
