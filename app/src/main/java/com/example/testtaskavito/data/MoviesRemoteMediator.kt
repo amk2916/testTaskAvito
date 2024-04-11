@@ -5,6 +5,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
+import androidx.paging.log
 import com.example.testtaskavito.data.local.ModelForListLocal
 import com.example.testtaskavito.data.local.MoviesListDao
 import retrofit2.HttpException
@@ -25,36 +26,41 @@ class MoviesRemoteMediator @Inject constructor(
         state: PagingState<Int, ModelForListLocal>
     ): MediatorResult {
         //try {
+
+            Log.e("RemoteMediator", year.toString())
             val page = when (loadType) {
                 LoadType.REFRESH -> 1
                 LoadType.PREPEND -> {
+                    Log.e("PREPEND", year.toString())
                     return MediatorResult.Success(endOfPaginationReached = true)
                 }
                 LoadType.APPEND -> {
-                    try {
+//                    try {
                         val Page = state.lastItemOrNull()?.page
                             ?: 0
 
-
+                        Log.e("APPEND", "${year.toString()} $Page")
                         val nextPage = Page +1
                         Log.e("nextPage", nextPage.toString())
-                        val pageSize = state.config.pageSize
-                        val response = apiService.getListFilm(nextPage, pageSize, nameCountry, year, ageRating)
-
-                        if (response.isSuccessful) {
-                            val movies = response.body()?.docs?.map { it.toCachedMovie(nextPage) } ?: emptyList()
-                            movieDao.insertAll(movies)
-                            val endOfPaginationReached = movies.isEmpty()
-
-                            return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
-                        } else {
-                            Broacast.pushError(response.message())
-                            return MediatorResult.Error(HttpException(response))
-                        }
-                    } catch (exception: Exception) {
-                        Broacast.pushError(exception.toString())
-                        return MediatorResult.Error(exception)
-                    }
+                        if(state.pages.size < state.config.pageSize) return MediatorResult.Success(endOfPaginationReached = true)
+                        nextPage
+//                        val pageSize = state.config.pageSize
+//                        val response = apiService.getListFilm(nextPage, pageSize, nameCountry, year, ageRating)
+//
+//                        if (response.isSuccessful) {
+//                            val movies = response.body()?.docs?.map { it.toCachedMovie(nextPage) } ?: emptyList()
+//                            movieDao.insertAll(movies)
+//                            val endOfPaginationReached = movies.isEmpty()
+//
+//                            return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
+//                        } else {
+//                            Broacast.pushError(response.message())
+//                            return MediatorResult.Error(HttpException(response))
+//                        }
+//                    } catch (exception: Exception) {
+//                        Broacast.pushError(exception.toString())
+//                        return MediatorResult.Error(exception)
+//                    }
                 }
             }
 

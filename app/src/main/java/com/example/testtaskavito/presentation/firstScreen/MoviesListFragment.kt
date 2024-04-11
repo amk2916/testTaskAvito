@@ -1,9 +1,11 @@
 package com.example.testtaskavito.presentation.firstScreen
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -29,6 +31,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MoviesListFragment : Fragment() {
+
+    private var nameCountry: String? = null
+    private var ageRating: Int? = null
+    private var year: Int? = null
 
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[MoviesViewModel::class.java]
@@ -59,6 +65,20 @@ class MoviesListFragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerFilms)
         val progress = view.findViewById<ProgressBar>(R.id.progress)
 
+        val imageView = view.findViewById<ImageView>(R.id.filterImage)
+
+        imageView.setOnClickListener {
+            val fragment = FilterFragment.instance(nameCountry, year, ageRating)
+
+            parentFragmentManager
+                .beginTransaction()
+                .add(R.id.fragmentContainer, fragment)
+                .addToBackStack("")
+                .commit()
+
+
+        }
+
         setupAdapter(recyclerView)
 
         moviesAdapter.addLoadStateListener { state ->
@@ -81,6 +101,45 @@ class MoviesListFragment : Fragment() {
                     .show()
             }
             .launchIn(lifecycleScope)
+
+        parentFragmentManager.setFragmentResultListener("requestKey", viewLifecycleOwner) { requestKey, bundle,  ->
+            Log.e("setFragmentResultListener", "1")
+            var nameCountryET = bundle.getString("nameCountry")
+            val ageRatingET = bundle.getString("ageRating")
+            val yearET = bundle.getString("year")
+
+            var newValueNameCountry = ""
+            var newValueAgeRating = ""
+            var newValueYear = ""
+
+           if (nameCountryET!=null || nameCountryET !=""){
+               if (nameCountryET != null) {
+                   newValueNameCountry = nameCountryET
+               }
+           }
+           if (ageRatingET!=null || ageRatingET !=""){
+               if (ageRatingET != null) {
+                   newValueAgeRating = ageRatingET
+               }
+           }
+           if (yearET!=null || yearET !=""){
+               if (yearET != null) {
+                   newValueYear = yearET
+               }
+           }
+
+            if(newValueNameCountry !=""||newValueAgeRating!=""||newValueYear!=""){
+                if(newValueYear.toInt()!=year||newValueAgeRating.toInt()!=ageRating||newValueNameCountry!=nameCountry) {
+                    nameCountry = if(newValueAgeRating.isEmpty()) null else newValueNameCountry
+                    year = newValueYear.toInt()
+                    ageRating = if(newValueAgeRating.isEmpty()) null else newValueAgeRating.toInt()
+                    viewModel.getWithFilter(nameCountry, ageRating, year)
+                }
+            }
+
+
+
+        }
     }
 
 
@@ -106,4 +165,21 @@ class MoviesListFragment : Fragment() {
     companion object {
         fun instanceMoviesListFragment() = MoviesListFragment()
     }
+
+    override fun onPause() {
+        super.onPause()
+        Log.e("MoviesListFragment","onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.e("MoviesListFragment", "OnStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e("MoviesListFragment", "ondestroy")
+    }
+
+
 }

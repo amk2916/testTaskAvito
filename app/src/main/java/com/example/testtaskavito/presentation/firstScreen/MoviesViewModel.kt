@@ -17,6 +17,8 @@ class MoviesViewModel @Inject constructor(
     private val queryGetMoviesUseCaseProvider: GetMoviesUseCase
 ) : ViewModel() {
 
+
+
     private val _movies: MutableStateFlow<PagingData<ModelForListLocal>> =
         MutableStateFlow(PagingData.empty())
     val movies: StateFlow<PagingData<ModelForListLocal>> = _movies
@@ -26,8 +28,15 @@ class MoviesViewModel @Inject constructor(
         fetchMovies()
     }
 
-    private fun fetchMovies() {
-        queryGetMoviesUseCaseProvider.getMovies()
+    fun getWithFilter(nameCountry: String?, ageRating: Int?, year: Int?){
+        if (!(nameCountry ==null && ageRating==null && year ==null)){
+            Log.e("getWithFilter", "fetchMovies")
+            fetchMovies(nameCountry, ageRating, year)
+        }
+    }
+
+    private fun fetchMovies(nameCountry: String? = null, ageRating: Int? = null, year: Int? = null) {
+        queryGetMoviesUseCaseProvider.getMovies(nameCountry, year, ageRating)
             .cachedIn(viewModelScope)
             .onEach { pagingData ->
                 _movies.value = pagingData

@@ -1,5 +1,6 @@
 package com.example.testtaskavito.data
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -38,9 +39,10 @@ class RepositoryImpl @Inject constructor(
         year: Int?,
         ageRating: Int?
     ): Flow<PagingData<ModelForListLocal>> {
+        Log.e("Repository", "getMovies")
         val moviesRemoteMediator = createMoviesRemoteMediator(countryName, year, ageRating)
         return Pager(
-            config = PagingConfig(pageSize = 16),
+            config = PagingConfig(pageSize = 20),
             remoteMediator = moviesRemoteMediator,
             pagingSourceFactory = {
                 movieDao.getAllMovies(countryName, year, ageRating)
