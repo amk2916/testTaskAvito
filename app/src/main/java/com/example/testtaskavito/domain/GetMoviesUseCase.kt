@@ -1,6 +1,9 @@
 package com.example.testtaskavito.domain
 
+import androidx.paging.PagingData
 import androidx.paging.PagingSource
+import com.example.testtaskavito.data.local.ModelForListLocal
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetMoviesUseCase @Inject constructor(
@@ -26,7 +29,7 @@ class GetMoviesUseCase @Inject constructor(
         return repository.getMovieForID(idServer)
     }
 
-    fun getMovies() : PagingSource<Int, MovieForList>{
+    fun getMovies() : Flow<PagingData<ModelForListLocal>> {
         return repository.getMovies()
     }
 }

@@ -15,7 +15,6 @@ interface MoviesService {
       //  @Query("countries.name") name: String
     ): Response<MovieModel>
 
-
     @GET("v1.4/movie/{id}")
     suspend fun getFilmForId(
         @Path("id") id: Int

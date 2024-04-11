@@ -5,7 +5,7 @@ data class MovieForList(
     val poster: String,
     val name: String,
     val year: Int,
-    val ageCategory: Int,
+//    val ageCategory: Int,
     val rating: String,
-    var idLocal: Long? = null
+//    var idLocal: Long? = null*/
 )

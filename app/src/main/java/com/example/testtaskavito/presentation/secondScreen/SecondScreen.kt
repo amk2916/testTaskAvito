@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +16,9 @@ import com.example.testtaskavito.presentation.ViewModelFactory
 import com.example.testtaskavito.presentation.firstScreen.MoviesViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -53,17 +57,21 @@ class SecondScreen : Fragment() {
 
         val poster = view.findViewById<ImageView>(R.id.posterView)
         val nameMovie = view.findViewById<TextView>(R.id.nameMovie)
-        lifecycleScope.launch {
-            viewModel.movie.collect {
-                nameMovie.text = it.nameFilm
-                Picasso.get()
-                    .load(it.posters)
-                    .error(R.drawable.default_poster)
-                    .resize(poster.width, poster.height)
-                    .into(poster)
-            }
-        }
+        val progressBar = view.findViewById<View>(R.id.progress_bar)
 
+        viewModel.isLoadingFlow.onEach {
+            progressBar.isVisible = it
+        }.launchIn(lifecycleScope)
+
+        viewModel.movie
+            .onEach {
+            nameMovie.text = it.nameFilm
+            Picasso.get()
+                .load(it.posters)
+                .error(R.drawable.default_poster)
+                .resize(poster.width, poster.height)
+                .into(poster)
+        }.launchIn(lifecycleScope)
 
         /*       val ratingKp = view.findViewById<TextView>(R.id.ratingKp)
                val ratingImdb = view.findViewById<TextView>(R.id.ratingImdb)
