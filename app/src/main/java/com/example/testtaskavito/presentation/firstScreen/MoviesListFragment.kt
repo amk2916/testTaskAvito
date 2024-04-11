@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -15,18 +16,23 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testtaskavito.App
 import com.example.testtaskavito.R
+import com.example.testtaskavito.data.Broacast
 import com.example.testtaskavito.presentation.MoviesAdapter
 import com.example.testtaskavito.presentation.MoviesLoadStateAdapter
 import com.example.testtaskavito.presentation.ViewModelFactory
 import com.example.testtaskavito.presentation.secondScreen.SecondScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MoviesListFragment : Fragment() {
 
-    private lateinit var viewModel: MoviesViewModel
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[MoviesViewModel::class.java]
+    }
 
     private lateinit var moviesAdapter: MoviesAdapter
 
@@ -50,9 +56,8 @@ class MoviesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         component.inject(this)
 
-        val recyclerView  = view.findViewById<RecyclerView>(R.id.recyclerFilms)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerFilms)
         val progress = view.findViewById<ProgressBar>(R.id.progress)
-        viewModel = ViewModelProvider(this, viewModelFactory)[MoviesViewModel::class.java]
 
         setupAdapter(recyclerView)
 
@@ -70,13 +75,16 @@ class MoviesListFragment : Fragment() {
         }
 
 
-
-
-
+        Broacast.errorUpdates
+            .onEach {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG)
+                    .show()
+            }
+            .launchIn(lifecycleScope)
     }
 
 
-    private fun setupAdapter(recyclerView: RecyclerView){
+    private fun setupAdapter(recyclerView: RecyclerView) {
         val dimenCornerRatingTV = resources.getDimension(R.dimen.cornerTextViewRating)
         val displayMetrics = resources.displayMetrics
 
@@ -94,7 +102,8 @@ class MoviesListFragment : Fragment() {
             header = MoviesLoadStateAdapter()
         )
     }
-    companion object{
-        fun instanceMoviesListFragment()  = MoviesListFragment()
+
+    companion object {
+        fun instanceMoviesListFragment() = MoviesListFragment()
     }
 }

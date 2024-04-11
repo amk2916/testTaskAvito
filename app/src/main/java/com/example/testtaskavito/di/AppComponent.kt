@@ -1,6 +1,7 @@
 package com.example.testtaskavito.di
 
 import android.app.Application
+import com.example.testtaskavito.di.module.DBModule
 import com.example.testtaskavito.di.module.InternetModule
 import com.example.testtaskavito.di.module.RepositoryModule
 import com.example.testtaskavito.di.module.ViewModelModule
@@ -13,7 +14,8 @@ import dagger.Component
 @Component(modules = [
     InternetModule::class,
     ViewModelModule::class,
-    RepositoryModule::class
+    RepositoryModule::class,
+    DBModule::class
 ])
 interface AppComponent {
     fun inject(fragment: MoviesListFragment)

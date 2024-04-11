@@ -58,6 +58,12 @@ dependencies {
     implementation(libs.viewModelRKTX)
     implementation(libs.coroutinesCore)
     implementation(libs.coroutinesAndroid)
+
+    implementation(libs.room)
+    implementation(libs.roomCoroutines)
+    implementation(libs.roomPaging)
+
+    ksp(libs.roomCompiler)
   //  annotationProcessor(libs.daggerCompiler)
 
 

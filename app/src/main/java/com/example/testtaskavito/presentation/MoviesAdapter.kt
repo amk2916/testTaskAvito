@@ -3,6 +3,7 @@ package com.example.testtaskavito.presentation
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.util.DisplayMetrics
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -10,13 +11,14 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.testtaskavito.R
+import com.example.testtaskavito.data.local.ModelForListLocal
 import com.example.testtaskavito.domain.MovieForList
 import com.squareup.picasso.Picasso
 
 class MoviesAdapter(
     displayMetrics: DisplayMetrics,
     private val dimenCornerRatingTV: Float
-) : PagingDataAdapter<MovieForList, MoviesViewHolder>(MovieDiffItemCallback) {
+) : PagingDataAdapter<ModelForListLocal, MoviesViewHolder>(MovieDiffItemCallback) {
 
     val heightImage = TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
@@ -24,16 +26,17 @@ class MoviesAdapter(
         displayMetrics
     )
 
-    var onClickListenerItem: ((MovieForList) -> Unit)? = null
+    var onClickListenerItem: ((ModelForListLocal) -> Unit)? = null
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         val movieItem = getItem(position)
+        Log.e("onBindViewHolder", movieItem.toString())
         val poster = movieItem?.poster
         val rating = movieItem?.rating
         if (rating != null) {
-            holder.rating.text = rating
+            holder.rating.text = rating.kp.toString()
 
-            val newBackground = when (rating.toFloat()) {
+            val newBackground = when (rating.kp?.toFloat()?:5f) {
                 in 8f..10f -> {
                     createBackgroundTextView(Color.GREEN, dimenCornerRatingTV)
                 }
@@ -94,13 +97,16 @@ class MoviesAdapter(
 
 }
 
-private object MovieDiffItemCallback : DiffUtil.ItemCallback<MovieForList>() {
+private object MovieDiffItemCallback : DiffUtil.ItemCallback<ModelForListLocal>() {
 
-    override fun areItemsTheSame(oldItem: MovieForList, newItem: MovieForList): Boolean {
+    override fun areItemsTheSame(oldItem: ModelForListLocal, newItem: ModelForListLocal): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: MovieForList, newItem: MovieForList): Boolean {
+    override fun areContentsTheSame(
+        oldItem: ModelForListLocal,
+        newItem: ModelForListLocal
+    ): Boolean {
         return oldItem == newItem
     }
 }

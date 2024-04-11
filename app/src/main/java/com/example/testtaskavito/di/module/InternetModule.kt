@@ -6,10 +6,15 @@ import com.example.testtaskavito.data.MoviesService
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.Protocol
+import okhttp3.Request
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
+import java.util.concurrent.TimeUnit
 
 @Module
 class InternetModule {
@@ -33,7 +38,20 @@ class InternetModule {
                         token
                     ) // Попробуем передать токен с помощью ретрофита в гет запрос
                 val request = requestBuilder.build()
-                chain.proceed(request)
+                try {
+                    chain.proceed(request)
+                } catch (e: Exception) {
+                    val body = with(ResponseBody) {
+                        "Error body ".toResponseBody()
+                    }
+                    okhttp3.Response.Builder()
+                        .code(500)
+                        .protocol(Protocol.HTTP_1_0)
+                        .request(request)
+                        .body(body)
+                        .message(e.message ?: "Def error")
+                        .build()
+                }
             }
             .addInterceptor(interceptor)
             .build()
