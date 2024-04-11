@@ -17,7 +17,9 @@ fun Docs.toCachedMovie(page: Int): ModelForListLocal{
         name = name,
         year = year,
         poster = poster?.url,
-        page = page
+        page = page,
+        ageRating = ageRating?:0,
+        country = countries.toString()
     )
 }
 

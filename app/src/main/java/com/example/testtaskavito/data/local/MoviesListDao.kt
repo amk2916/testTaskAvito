@@ -17,4 +17,13 @@ interface MoviesListDao {
     @Query("DELETE FROM cache_movie_list_model")
     suspend fun clearMovies()
 
+
+    @Query("""
+    SELECT * FROM cache_movie_list_model
+    WHERE (:year IS NULL OR year = :year)
+    AND (:ageRating IS NULL OR ageRating = :ageRating)
+    AND (:country IS NULL OR UPPER(country) LIKE UPPER('%' || :country || '%'))
+    """)
+    suspend fun getMovieWithFilter(country: String?, ageRating: Int?, year: Int?): ModelForListLocal
+
 }

@@ -29,7 +29,9 @@ data class ModelForListLocal(
     var name: String?,
     var year: Int?,
     var poster: String?,
-    var page:Int
+    var page:Int,
+    var ageRating: Int,
+    var country: String
 )
 
 class RatingConverter {

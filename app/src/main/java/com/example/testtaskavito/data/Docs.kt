@@ -14,11 +14,11 @@ data class Docs(
     @SerializedName("year") var year: Int?,
     @SerializedName("poster") var poster: Picture?,
   //  @SerializedName("genres") var genres: ArrayList<Genres> = arrayListOf(), // жанры
-  //  @SerializedName("countries") var countries: ArrayList<Countries> = arrayListOf(), // страны
+    @SerializedName("countries") var countries: ArrayList<Countries> = arrayListOf(), // страны
   //  @SerializedName("typeNumber") var typeNumber: Int?, //тип в числовом представлении
   //  @SerializedName("ratingMpaa") var ratingMpaa: String?, //возрастной рейтинг по MPAA
   //  @SerializedName("shortDescription") var shortDescription: String?,
-  //  @SerializedName("ageRating") var ageRating: Int?, //возрастной рейтинг
+    @SerializedName("ageRating") var ageRating: Int?, //возрастной рейтинг
   //  @SerializedName("logo") var logo: Logo?,
   //  @SerializedName("isSeries") var isSeries: Boolean?, // сериал или нет
   //  @SerializedName("seriesLength") var seriesLength: String?  // продолжительность серии
