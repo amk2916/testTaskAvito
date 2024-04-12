@@ -26,4 +26,8 @@ interface MoviesListDao {
     """)
     fun getAllMovies(country: String?= null, ageRating: Int? = null, year: Int? =null): PagingSource<Int, ModelForListLocal>
 
+
+    @Query("SELECT * FROM cache_movie_list_model")
+    fun getMovies():  List<ModelForListLocal>
+
 }

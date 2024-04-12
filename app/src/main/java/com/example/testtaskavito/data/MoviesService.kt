@@ -11,7 +11,7 @@ interface MoviesService {
     @GET("v1.4/movie")
     suspend fun getListFilm(
         @Query("page") @IntRange(from = 1) page: Int = 1,
-        @Query("limit") @IntRange(from = 1, to = 10) limit: Int = 10,
+        @Query("limit") @IntRange(from = 1, to = 50) limit: Int = 30,
         @Query("countries.name") countryName: String? = null,
         @Query("year") year: Int? =  null,
         @Query("ageRating") ageRating: Int? = null

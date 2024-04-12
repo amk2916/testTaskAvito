@@ -42,12 +42,11 @@ class RepositoryImpl @Inject constructor(
         Log.e("Repository", "getMovies")
         val moviesRemoteMediator = createMoviesRemoteMediator(countryName, year, ageRating)
         return Pager(
-            config = PagingConfig(pageSize = 20),
-            remoteMediator = moviesRemoteMediator,
-            pagingSourceFactory = {
+            config = PagingConfig(pageSize = 30),
+            remoteMediator = moviesRemoteMediator) {
                 movieDao.getAllMovies(countryName, year, ageRating)
-            }
-        ).flow
+            }.flow
+
     }
 
     override suspend fun getMovieForID(idServer: Int?): Movie? {
