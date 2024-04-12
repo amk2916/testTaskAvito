@@ -12,7 +12,6 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.testtaskavito.R
 import com.example.testtaskavito.data.local.ModelForListLocal
-import com.example.testtaskavito.domain.MovieForList
 import com.squareup.picasso.Picasso
 
 class MoviesAdapter(

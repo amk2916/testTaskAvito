@@ -1,4 +1,4 @@
-package com.example.testtaskavito.data
+package com.example.testtaskavito.data.server
 
 import com.example.testtaskavito.domain.Rating
 import com.google.gson.annotations.SerializedName

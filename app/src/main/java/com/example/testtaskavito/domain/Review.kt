@@ -1,5 +1,6 @@
 package com.example.testtaskavito.domain
 
+//коментарии на экране с детализацией
 data class Review(
     val idFilm: Long,
     val author: String,

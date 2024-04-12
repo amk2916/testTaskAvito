@@ -1,6 +1,8 @@
-package com.example.testtaskavito.data
+package com.example.testtaskavito.data.server
 
 import androidx.annotation.IntRange
+import com.example.testtaskavito.data.server.MovieModel
+import com.example.testtaskavito.data.server.MovieModelItem
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

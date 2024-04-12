@@ -2,19 +2,16 @@ package com.example.testtaskavito.di.module
 
 import android.app.Application
 import com.example.testtaskavito.R
-import com.example.testtaskavito.data.MoviesService
+import com.example.testtaskavito.data.server.MoviesService
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
-import okhttp3.Request
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
-import java.util.concurrent.TimeUnit
 
 @Module
 class InternetModule {

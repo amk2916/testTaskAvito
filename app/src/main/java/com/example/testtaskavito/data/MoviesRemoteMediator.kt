@@ -5,11 +5,11 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import androidx.paging.log
 import com.example.testtaskavito.data.local.ModelForListLocal
 import com.example.testtaskavito.data.local.MoviesListDao
+import com.example.testtaskavito.data.server.MoviesService
 import retrofit2.HttpException
-import javax.inject.Inject
+
 @OptIn(ExperimentalPagingApi::class)
 class MoviesRemoteMediator(
     private val apiService: MoviesService,

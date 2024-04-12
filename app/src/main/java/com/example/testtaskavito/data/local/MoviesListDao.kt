@@ -11,12 +11,8 @@ interface MoviesListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(movies: List<ModelForListLocal>)
 
-//    @Query("SELECT * FROM cache_movie_list_model")
-//    fun getAllMovies(): PagingSource<Int, ModelForListLocal>
-
     @Query("DELETE FROM cache_movie_list_model")
     suspend fun clearMovies()
-
 
     @Query("""
     SELECT * FROM cache_movie_list_model
@@ -26,7 +22,7 @@ interface MoviesListDao {
     """)
     fun getAllMovies(country: String?= null, ageRating: Int? = null, year: Int? =null): PagingSource<Int, ModelForListLocal>
 
-
+    //todo: просто в лог вызвать
     @Query("SELECT * FROM cache_movie_list_model")
     fun getMovies():  List<ModelForListLocal>
 
