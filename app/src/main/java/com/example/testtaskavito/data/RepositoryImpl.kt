@@ -42,7 +42,7 @@ class RepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun getMovieForID(idServer: Int?): Movie? {
-        return moviesService.getFilmForId(idServer!!).body()?.toMovie()
+    override suspend fun getMovieForID(idServer: Int): Movie? {
+        return moviesService.getFilmForId(idServer).body()?.toMovie()
     }
 }
