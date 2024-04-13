@@ -3,13 +3,13 @@ package com.example.testtaskavito.data.server
 import com.google.gson.annotations.SerializedName
 
 //коментарии на экране с детализацией
-data class Review(
+data class Reviews(
     @SerializedName("docs")
-    var docs: ArrayList<ActorsDocs> = arrayListOf(),
+    var docs: ArrayList<ReviewDocs> = arrayListOf(),
 )
 
 
-data class ActorsDocs(
+data class ReviewDocs(
     @SerializedName("id")
     var id: Int? = null,
     @SerializedName("movieId")

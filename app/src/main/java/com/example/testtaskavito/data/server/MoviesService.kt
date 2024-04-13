@@ -35,7 +35,7 @@ interface MoviesService {
         @Query("page") @IntRange(from = 1) page: Int = 1,
         @Query("limit") @IntRange(from = 1, to = 50) limit: Int = 30,
         @Query("&movieId") movieId: Int? =  null
-    ) : Response<Review>
+    ) : Response<Reviews>
 
 
 

@@ -5,12 +5,19 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import com.example.testtaskavito.data.local.LocalPageSource
 import com.example.testtaskavito.data.local.ModelForListLocal
 import com.example.testtaskavito.data.local.MoviesListDao
+import com.example.testtaskavito.data.server.ActorPageSource
+import com.example.testtaskavito.data.server.Actors
 import com.example.testtaskavito.data.server.MoviesService
+import com.example.testtaskavito.data.server.ReviewPageSource
+import com.example.testtaskavito.data.server.Reviews
+import com.example.testtaskavito.domain.Actor
 import com.example.testtaskavito.domain.Movie
 import com.example.testtaskavito.domain.Repository
+import com.example.testtaskavito.domain.Review
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -40,6 +47,16 @@ class RepositoryImpl @Inject constructor(
             remoteMediator = remoteMediator,
             pagingSourceFactory = { LocalPageSource(movieDao) }
         ).flow
+    }
+
+    override fun getActorsForID(idMovie: Int): PagingSource<Int,Actor >{
+        val pageSource = ActorPageSource(moviesService, idMovie)
+        return pageSource
+    }
+
+    override fun getReviewForID(idMovie: Int): PagingSource<Int, Review> {
+        val pageSource = ReviewPageSource(moviesService, idMovie)
+        return pageSource
     }
 
     override suspend fun getMovieForID(idServer: Int): Movie? {

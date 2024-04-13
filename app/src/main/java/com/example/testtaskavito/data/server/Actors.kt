@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName
 
 data class Actors (
     @SerializedName("docs")
-    var docs: ArrayList<actorsDocs> = arrayListOf()
+    var docs: ArrayList<ActorsDocs> = arrayListOf()
 )
 
-data class actorsDocs (
+data class ActorsDocs (
     @SerializedName("id")
     var id: Int? = null,
     @SerializedName("name")
