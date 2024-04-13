@@ -3,6 +3,7 @@ package com.example.testtaskavito.data.server
 import androidx.annotation.IntRange
 import com.example.testtaskavito.data.server.MovieModel
 import com.example.testtaskavito.data.server.MovieModelItem
+import com.example.testtaskavito.domain.Review
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -24,6 +25,8 @@ interface MoviesService {
     suspend fun getFilmForId(
         @Path("id") id: Int
     ) : Response<MovieModelItem>
+
+
 
 
 
