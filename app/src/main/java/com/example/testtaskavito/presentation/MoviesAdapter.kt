@@ -35,7 +35,7 @@ class MoviesAdapter(
         if (rating != null) {
             holder.rating.text = rating.kp.toString()
 
-            val newBackground = when (rating.kp?.toFloat()?:5f) {
+            val newBackground = when (rating.kp?:5f) {
                 in 8f..10f -> {
                     createBackgroundTextView(Color.GREEN, dimenCornerRatingTV)
                 }
@@ -53,7 +53,7 @@ class MoviesAdapter(
         } else {
             holder.rating.visibility = View.GONE
         }
-        val a = holder.poster.maxWidth
+
         Picasso.get()
             .load(poster)
             .error(R.drawable.default_poster)

@@ -9,6 +9,7 @@ import com.example.testtaskavito.data.local.ModelForListLocal
 import com.example.testtaskavito.domain.GetMoviesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -36,11 +37,14 @@ class MoviesViewModel @Inject constructor(
     }
 
     private fun fetchMovies(nameCountry: String? = null, ageRating: Int? = null, year: Int? = null) {
+
         queryGetMoviesUseCaseProvider.getMovies(nameCountry, year, ageRating)
             .cachedIn(viewModelScope)
             .onEach { pagingData ->
+                Log.e("fetchMovies", "fetchMovies")
                 _movies.value = pagingData
-            }.launchIn(viewModelScope)
+            }
+            .launchIn(viewModelScope)
 
     }
 

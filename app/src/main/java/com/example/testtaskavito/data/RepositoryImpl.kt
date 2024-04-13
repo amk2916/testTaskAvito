@@ -1,10 +1,11 @@
 package com.example.testtaskavito.data
 
-import android.util.Log
+import MoviesRemoteMediator
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.example.testtaskavito.data.local.LocalPageSource
 import com.example.testtaskavito.data.local.ModelForListLocal
 import com.example.testtaskavito.data.local.MoviesListDao
 import com.example.testtaskavito.data.server.MoviesService
@@ -19,33 +20,26 @@ class RepositoryImpl @Inject constructor(
     private val movieDao: MoviesListDao
 ) : Repository {
 
-    private fun createMoviesRemoteMediator(
-        countryName: String? = null,
-        year: Int? = null,
-        ageRating: Int? = null
-    ): MoviesRemoteMediator {
-        return MoviesRemoteMediator(
-            apiService = moviesService,
-            movieDao = movieDao,
-            nameCountry  = countryName,
-            year = year,
-            ageRating = ageRating
-        )
-    }
 
     override fun getMovies(
         countryName: String?,
         year: Int?,
-        ageRating: Int?
-    ): Flow<PagingData<ModelForListLocal>> {
-        Log.e("Repository", "getMovies")
-        val moviesRemoteMediator = createMoviesRemoteMediator(countryName, year, ageRating)
-        return Pager(
-            config = PagingConfig(pageSize = 30),
-            remoteMediator = moviesRemoteMediator) {
-                movieDao.getAllMovies(countryName, year, ageRating)
-            }.flow
+        ageRating: Int?): Flow<PagingData<ModelForListLocal>> {
+        // Создаем MoviesRemoteMediator
+        val remoteMediator = MoviesRemoteMediator(
+            apiService = moviesService,
+            movieDao = movieDao,
+            nameCountry = countryName,
+            year = year,
+            ageRating = ageRating
+        )
 
+        // Создаем Pager для загрузки данных с помощью RemoteMediator и LocalPageSource
+        return Pager(
+            config = PagingConfig(pageSize = 16),
+            remoteMediator = remoteMediator,
+            pagingSourceFactory = { LocalPageSource(movieDao) }
+        ).flow
     }
 
     override suspend fun getMovieForID(idServer: Int?): Movie? {

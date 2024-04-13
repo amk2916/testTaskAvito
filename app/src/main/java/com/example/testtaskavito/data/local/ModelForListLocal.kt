@@ -19,10 +19,9 @@ import com.google.gson.Gson
 
 )
 data class ModelForListLocal(
-    @PrimaryKey(autoGenerate = true)
-    var idLocal: Int = 0,
     @TypeConverters(RatingConverter::class)
     var rating: Rating?,
+    @PrimaryKey
     var id: Int,
     var name: String?,
     var year: Int?,

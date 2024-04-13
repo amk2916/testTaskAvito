@@ -20,10 +20,28 @@ interface MoviesListDao {
     AND (:ageRating IS NULL OR ageRating = :ageRating)
     AND (:country IS NULL OR UPPER(country) LIKE UPPER('%' || :country || '%'))
     """)
-    fun getAllMovies(country: String?= null, ageRating: Int? = null, year: Int? =null): PagingSource<Int, ModelForListLocal>
+    fun getAllMovies(
+        country: String?= null,
+        ageRating: Int? = null,
+        year: Int? =null
+    ): PagingSource<Int, ModelForListLocal>
+
+    /**
+     * Метод для получения фильмов из локальной базы данных в зависимости от номера страницы и размера загрузки.
+     *
+     * @param offset зависит от номера страниц и размера.
+     * @param pageSize Размер загрузки (количество записей, которое нужно загрузить).
+     * @return Список фильмов для текущей страницы.
+     */
+    @Query("""
+        SELECT * FROM cache_movie_list_model
+        ORDER BY id
+        LIMIT :pageSize OFFSET :offset
+    """)
+    suspend fun getMoviesByPage(offset: Int, pageSize: Int): List<ModelForListLocal>
 
     //todo: просто в лог вызвать
     @Query("SELECT * FROM cache_movie_list_model")
-    fun getMovies():  List<ModelForListLocal>
+    fun getMoviesLog():  List<ModelForListLocal>
 
 }
