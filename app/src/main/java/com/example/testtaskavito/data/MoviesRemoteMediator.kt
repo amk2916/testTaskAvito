@@ -1,5 +1,3 @@
-package com.example.testtaskavito.data
-
 import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -7,104 +5,78 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.example.testtaskavito.data.local.ModelForListLocal
 import com.example.testtaskavito.data.local.MoviesListDao
+import com.example.testtaskavito.data.server.MoviesService
+import com.example.testtaskavito.data.toCachedMovie
 import retrofit2.HttpException
-import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
-class MoviesRemoteMediator @Inject constructor(
+class MoviesRemoteMediator(
     private val apiService: MoviesService,
-    private val movieDao: MoviesListDao
+    private val movieDao: MoviesListDao,
+    private val nameCountry: String? = null,
+    private val year: Int? = null,
+    private val ageRating: Int? = null
 ) : RemoteMediator<Int, ModelForListLocal>() {
+
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, ModelForListLocal>
     ): MediatorResult {
-        //try {
-            val page = when (loadType) {
-                LoadType.REFRESH -> 1
-                LoadType.PREPEND -> {
-                    return MediatorResult.Success(endOfPaginationReached = true)
-
-//                    // В этом случае вы можете реализовать логику для загрузки предыдущих страниц,
-//                    // если это необходимо
-//                    val firstItem = state.firstItemOrNull()
-//                    val prevKey = firstItem?.id ?: return MediatorResult.Success(endOfPaginationReached = true)
-//                    val currentPage = state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.first()?.id ?: 1
-//                    val prevPage = if (prevKey > 1) currentPage - 1 else null
-//                    // В этом месте вы можете использовать prevPage для загрузки предыдущей страницы данных
-//                    // ...
-//                    return MediatorResult.Success(endOfPaginationReached = prevPage == null)
+        try {
+            // Определяем текущую страницу
+            val currentPage = when (loadType) {
+                LoadType.REFRESH -> {
+                    Log.e("RemoteMediator01","Refresh")
+                    1
                 }
                 LoadType.APPEND -> {
-                    try {
-                        val Page = state.lastItemOrNull()?.page
-                            ?: 0
+                    Log.e("RemoteMediator1",state.lastItemOrNull().toString())
+                    val lastItem = state.lastItemOrNull() ?: return MediatorResult.Success(endOfPaginationReached = true)
+                    Log.e("RemoteMediator2", state.pages.size.toString())
+                    Log.e("RemoteMediator3", state.toString())
 
-
-                        val nextPage = Page +1
-                        Log.e("nextPage", nextPage.toString())
-                        val pageSize = state.config.pageSize
-                        val response = apiService.getListFilm(nextPage, pageSize)
-
-                        if (response.isSuccessful) {
-                            val movies = response.body()?.docs?.map { it.toCachedMovie(nextPage) } ?: emptyList()
-                            movieDao.insertAll(movies)
-                            val endOfPaginationReached = movies.isEmpty()
-
-                            return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
-                        } else {
-                            Broacast.pushError(response.message())
-                            return MediatorResult.Error(HttpException(response))
-                        }
-                    } catch (exception: Exception) {
-                        Broacast.pushError(exception.toString())
-                        return MediatorResult.Error(exception)
-                    }
-//                    val next = state.pages.size
-//                    if(state.firstItemOrNull()==null||next < 15  ) {
-//                        return MediatorResult.Success(endOfPaginationReached = true)
-//                    } else {
-//                        state.firstItemOrNull()!!.page + 1
-//                    }
-//                    val page =  state.closestPageToPosition(state.firstItemOrNull()?.id?:0)
-//                    val newPage = page?.nextKey
-//                    val prevKey = page?.prevKey
-//                    Log.e("newPage", newPage.toString())
-//                    Log.e("prevKey", prevKey.toString())
-//                    if(newPage==null) {
-//
-//                        return MediatorResult.Success(endOfPaginationReached = true)
-//                    }else{
-//                        newPage+1
-//                    }
-//                    // В этом случае вы можете реализовать логику для загрузки следующих страниц,
-//                    // если это необходимо
-//                    val lastItem = state.lastItemOrNull()
-//                    val page = state.pages.firstOrNull{
-//                        it.data.first()
-//                    }
-//                    val nextPage = lastItem?.id ?: return MediatorResult.Success(endOfPaginationReached = true)
-//                    nextPage + 1
+                    state.pages.size + 1
+                }
+                LoadType.PREPEND -> {
+                    Log.e("RemoteMediator02","PREPEND")
+                    // Предотвращаем загрузку предыдущих страниц, так как обычно это не требуется
+                    return MediatorResult.Success(endOfPaginationReached = true)
                 }
             }
 
-            val pageSize = state.config.pageSize
-            val response = apiService.getListFilm(page, pageSize)
+            // Задаем размер страницы
+            val pageSize = state.config.pageSize+6
+            Log.e("RemoteMediator4","response")
+            // Загружаем фильмы с удаленного сервера
+            val response = apiService.getListFilm(
+                currentPage,
+                pageSize,
+                nameCountry,
+                year, ageRating)
 
-            if (response.isSuccessful) {
-                val movies = response.body()?.docs?.map { it.toCachedMovie(page) } ?: emptyList()
-                movieDao.insertAll(movies)
-                val endOfPaginationReached = movies.isEmpty()
-
-                return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
-            } else {
-                Broacast.pushError(response.message())
+            // Проверяем успешность запроса
+            if (!response.isSuccessful) {
                 return MediatorResult.Error(HttpException(response))
             }
-//        } catch (exception: Exception) {
-//            Broacast.pushError(exception.toString())
-//            return MediatorResult.Error(exception)
-//        }
-    }
 
+            // Получаем список фильмов из ответа
+            val movies = response.body()?.docs?.map { it.toCachedMovie(currentPage) } ?: emptyList()
+
+            // Если список фильмов пустой, возвращаем успех с флагом, что достигнут конец пагинации.
+            if (movies.isEmpty()) {
+                Log.e("RemoteMediator5", "1")
+                return MediatorResult.Success(endOfPaginationReached = true)
+            }
+
+            // Сохраняем фильмы в локальной базе данных
+            movieDao.insertAll(movies)
+
+            Log.e("RemoteMediator6", (movies.size < pageSize).toString())
+            // Возвращаем успех с флагом, что достигнут конец пагинации, если количество фильмов меньше, чем размер страницы
+            return MediatorResult.Success(endOfPaginationReached = movies.size < pageSize)
+        } catch (exception: Exception) {
+            // Если произошла ошибка, возвращаем MediatorResult.Error
+            return MediatorResult.Error(exception)
+        }
+    }
 }

@@ -1,6 +1,9 @@
-package com.example.testtaskavito.data
+package com.example.testtaskavito.data.server
 
 import androidx.annotation.IntRange
+import com.example.testtaskavito.data.server.MovieModel
+import com.example.testtaskavito.data.server.MovieModelItem
+import com.example.testtaskavito.domain.Review
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -11,7 +14,10 @@ interface MoviesService {
     @GET("v1.4/movie")
     suspend fun getListFilm(
         @Query("page") @IntRange(from = 1) page: Int = 1,
-        @Query("limit") @IntRange(from = 1, to = 10) limit: Int = 10,
+        @Query("limit") @IntRange(from = 1, to = 50) limit: Int = 30,
+        @Query("countries.name") countryName: String? = null,
+        @Query("year") year: Int? =  null,
+        @Query("ageRating") ageRating: Int? = null
       //  @Query("countries.name") name: String
     ): Response<MovieModel>
 
@@ -19,4 +25,9 @@ interface MoviesService {
     suspend fun getFilmForId(
         @Path("id") id: Int
     ) : Response<MovieModelItem>
+
+
+
+
+
 }

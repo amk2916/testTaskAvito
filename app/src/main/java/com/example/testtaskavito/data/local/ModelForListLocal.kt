@@ -3,10 +3,8 @@ package com.example.testtaskavito.data.local
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import androidx.room.Relation
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import com.example.testtaskavito.data.Picture
 import com.example.testtaskavito.domain.Rating
 import com.google.gson.Gson
 
@@ -21,15 +19,16 @@ import com.google.gson.Gson
 
 )
 data class ModelForListLocal(
-    @PrimaryKey(autoGenerate = true)
-    var idLocal: Int = 0,
     @TypeConverters(RatingConverter::class)
     var rating: Rating?,
+    @PrimaryKey
     var id: Int,
     var name: String?,
     var year: Int?,
     var poster: String?,
-    var page:Int
+    var page:Int,
+    var ageRating: Int,
+    var country: String
 )
 
 class RatingConverter {

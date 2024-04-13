@@ -13,13 +13,9 @@ import androidx.lifecycle.lifecycleScope
 import com.example.testtaskavito.App
 import com.example.testtaskavito.R
 import com.example.testtaskavito.presentation.ViewModelFactory
-import com.example.testtaskavito.presentation.firstScreen.MoviesViewModel
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SecondScreen : Fragment() {
@@ -45,7 +41,7 @@ class SecondScreen : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.movie_item, container, false)
+        return inflater.inflate(R.layout.movie_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,7 +52,15 @@ class SecondScreen : Fragment() {
 
 
         val poster = view.findViewById<ImageView>(R.id.posterView)
+
+        val ratingKp = view.findViewById<TextView>(R.id.ratingKp)
+        val ratingImdb = view.findViewById<TextView>(R.id.ratingImdb)
+        val ratingTmdb = view.findViewById<TextView>(R.id.ratingTmdb)
+        val filmDuration = view.findViewById<TextView>(R.id.filmDuration)
+       // val direction = view.findViewById<>()
         val nameMovie = view.findViewById<TextView>(R.id.nameMovie)
+
+
         val progressBar = view.findViewById<View>(R.id.progress_bar)
 
         viewModel.isLoadingFlow.onEach {

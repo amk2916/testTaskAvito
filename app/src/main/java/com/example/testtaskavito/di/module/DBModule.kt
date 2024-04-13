@@ -14,6 +14,7 @@ class DBModule {
     @ApplicationScope
     fun db(application: Application): AppDataBase = Room
         .databaseBuilder(application, AppDataBase::class.java, "MoviesDataBase")
+        .allowMainThreadQueries()
         .build()
 
     @Provides
