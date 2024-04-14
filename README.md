@@ -12,16 +12,34 @@
    URL (фильтр по году)--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&year=2022  
    URL (фильтр по возрастному рейтингу)--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&&ageRating=18  
    URL (фильтр по наименованию стран )--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&countries.name=Россия  
-   URL (со всеми фильтрами )--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&year=2022&ageRating=18&countries.name=Россия
-   ![image](https://github.com/amk2916/testTaskAvito/assets/128518853/70d841a5-eee3-4bcf-963c-1bc7783eddb9)
+   URL (со всеми фильтрами )--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&year=2022&ageRating=18&countries.name=Россия   
 
- 
-
-3. **Get запрос для поиска по наименованию** 
+2. **Get запрос для поиска по наименованию** 
    URL --> https://api.kinopoisk.dev/v1.4/movie/search?page=1&limit=10&query=doctor
 
+3. **Get запрос для поиска по ID (Вторая страница)** 
+   URL --> https://api.kinopoisk.dev/v1.4/movie/search?page=1&limit=10&query=doctor
+
+4. **Актеры по ID фильмы**
+   URL -->https://api.kinopoisk.dev/v1.4/person?page=1&limit=1&movies.id=535341
+   
+5. **коментарии по ID фильмы**
+   URL -->https://api.kinopoisk.dev/v1.4/review?page=1&limit=1&id=535341
+   
+6. **Постеры по ID фильмы**
+   URL -->https://api.kinopoisk.dev/v1.4/image?page=1&limit=10&movieId=535341
+   
+Примеры ответов можно найти по ссылке: https://drive.google.com/drive/folders/1x1fEB3OPvmDJ7y2NIbotKGeZeY74LULb?usp=sharing
 
 
 ## Функциональность
-При поиске по наименовнанию игнорируются остальные фильтры
-Кэшируется только основная выдача
+1. При поиске по наименовнанию игнорируются остальные фильтры
+2. Кэшируется только основная выдача, провалиться в детализацию фильма без наличия соединения с сетью не получится
+3. Нет истории запросов
+4. Нет поиска по жанрам
+5. Не успел добавить информацию по сериалам (в выдаче сериалы не отличаются от фильмов, поэтому при фильтрации по году , например 2022, можно встретить в выдачи 2018, год выхода сериала, но есть сезон 2022 года)
+6. Есть карусель для постеров. Делаю запрос на 15 постеров, чтобы был виде эффект карусели, пагинации в запросе нет.
+7. Есть пагинация на выдачу, на список комментариев, на список актеров
+
+## Сложности 
+1. Внутри кода есть todo, места на которые я не успел исправить
