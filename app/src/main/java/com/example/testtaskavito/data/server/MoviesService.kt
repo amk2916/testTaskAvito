@@ -45,4 +45,13 @@ interface MoviesService {
         @Query("movieId") movieId: Int? =  null
     ) : Response<Reviews>
 
+    @GET("v1.4/image")
+    suspend fun getPostersByFilmId(
+        @Query("page") @IntRange(from = 1) page: Int = 1,
+        @Query("limit") @IntRange(from = 1, to = 50) limit: Int = 30,
+        @Query("movieId") movieId: Int? =  null
+    ) : Response<Posters>
+
+
+
 }

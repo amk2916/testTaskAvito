@@ -183,6 +183,8 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/listActors" />
+
+
             <TextView
                 android:id="@+id/emptyCommentTextView"
                 android:layout_width="wrap_content"
@@ -209,6 +211,46 @@
                 tools:listitem="@layout/comments_item" />
 
 
+
+            <TextView
+                android:id="@+id/postersLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:text="Постеры"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/listComments" />
+
+
+            <TextView
+                android:id="@+id/emptyPosterTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/postersLabel"
+                android:layout_marginStart="10dp"
+                android:text="Нет данных о комментариях"
+                android:textSize="15sp"
+                android:visibility="gone"
+                android:layout_centerInParent="true"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listPosters"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/postersLabel"
+                tools:listitem="@layout/posters_item" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
@@ -224,6 +266,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
     </FrameLayout>
+
+
     <FrameLayout
         android:id="@+id/error_message"
         android:layout_width="match_parent"

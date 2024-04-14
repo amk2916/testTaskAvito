@@ -4,9 +4,11 @@ import com.example.testtaskavito.data.local.ModelForListLocal
 import com.example.testtaskavito.data.server.ActorsDocs
 import com.example.testtaskavito.data.server.Docs
 import com.example.testtaskavito.data.server.MovieModelItem
+import com.example.testtaskavito.data.server.PostersDocs
 import com.example.testtaskavito.data.server.ReviewDocs
 import com.example.testtaskavito.domain.Actor
 import com.example.testtaskavito.domain.Movie
+import com.example.testtaskavito.domain.Poster
 import com.example.testtaskavito.domain.Review
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -61,4 +63,11 @@ fun parseRating(rating: Float?):String{
     if (rating==null) return "--"
     val newRating = BigDecimal(rating.toDouble())
     return newRating.setScale(1,RoundingMode.DOWN).toString()
+}
+
+fun PostersDocs.toDomain() : Poster{
+    return Poster(
+        id = id ?: "",
+        poster = url ?: ""
+    )
 }

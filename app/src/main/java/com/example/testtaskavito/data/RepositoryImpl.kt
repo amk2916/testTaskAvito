@@ -1,6 +1,7 @@
 package com.example.testtaskavito.data
 
 import MoviesRemoteMediator
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -18,6 +19,7 @@ import com.example.testtaskavito.data.server.ReviewPageSource
 import com.example.testtaskavito.data.server.Reviews
 import com.example.testtaskavito.domain.Actor
 import com.example.testtaskavito.domain.Movie
+import com.example.testtaskavito.domain.Poster
 import com.example.testtaskavito.domain.Repository
 import com.example.testtaskavito.domain.Review
 import kotlinx.coroutines.flow.Flow
@@ -79,5 +81,11 @@ class RepositoryImpl @Inject constructor(
     override suspend fun getMovieForID(idServer: Int): Movie {
         return moviesService.getFilmForId(idServer).body()?.toMovie() ?: Movie.DEFAULT_MOVIE
 
+    }
+
+    override suspend fun getPostersByID(idServer: Int, countPosters: Int): List<Poster> {
+        Log.e("repository", "tut")
+        return moviesService.getPostersByFilmId(limit = countPosters, movieId = idServer).body()?.docs?.map { it.toDomain() }
+            ?: emptyList<Poster>()
     }
 }

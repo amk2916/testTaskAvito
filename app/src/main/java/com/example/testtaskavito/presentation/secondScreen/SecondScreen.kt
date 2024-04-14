@@ -37,6 +37,9 @@ class SecondScreen : Fragment() {
     private var actorAdapter: ActorsAdapter = ActorsAdapter()
     private var commentAdapter: ReviewsAdapter = ReviewsAdapter()
 
+
+
+    private lateinit var postersAdapter: PostersAdapter
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
@@ -63,10 +66,12 @@ class SecondScreen : Fragment() {
 
         viewModel = ViewModelProvider(this, viewModelFactory)[MovieDetailViewModel::class.java]
         viewModel.getMovie(idItem)
-
+        val heightPosters = resources.getDimensionPixelSize(R.dimen.postersHeight)
+        postersAdapter = PostersAdapter(heightPosters, 15)
 
         val recyclerActor = view.findViewById<RecyclerView>(R.id.listActors)
         val recyclerComment = view.findViewById<RecyclerView>(R.id.listComments)
+        val receclerPosters = view.findViewById<RecyclerView>(R.id.listPosters)
         val poster = view.findViewById<ImageView>(R.id.posterView)
         val ratingKp = view.findViewById<TextView>(R.id.ratingKp)
         val ratingImdb = view.findViewById<TextView>(R.id.ratingImdb)
@@ -79,6 +84,7 @@ class SecondScreen : Fragment() {
 
         val emptyActorTextView = view.findViewById<TextView>(R.id.emptyActorTextView)
         val emptyCommentTextView = view.findViewById<TextView>(R.id.emptyCommentTextView)
+        val emptyPostersTextView = view.findViewById<TextView>(R.id.emptyPosterTextView)
 
         Broacast.errorUpdates
             .onEach {
@@ -91,13 +97,14 @@ class SecondScreen : Fragment() {
 
         recyclerComment.adapter = commentAdapter
 
+
         //TODO: поправить если успею
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
 
                 viewModel.review
                     .onEach {
-                        commentAdapter.submitData(PagingData.empty())
+                        commentAdapter.submitData(it)
                         if (commentAdapter.itemCount == 0) {
                             emptyCommentTextView.isVisible = true
                             recyclerComment.isVisible = false
@@ -117,6 +124,21 @@ class SecondScreen : Fragment() {
                         } else {
                             emptyActorTextView.isVisible = false
                             recyclerActor.isVisible = true
+                        }
+                    }
+                    .launchIn(this)
+
+                viewModel.posters
+                    .onEach {
+                        Log.e("postersTAG", it.toString())
+                        postersAdapter.submitList(it)
+                        if (postersAdapter.itemCount == 0) {
+                            emptyPostersTextView.isVisible = true
+                            receclerPosters.isVisible = false
+                        } else {
+                            receclerPosters.adapter = postersAdapter
+                            emptyPostersTextView.isVisible = false
+                            receclerPosters.isVisible = true
                         }
                     }
                     .launchIn(this)

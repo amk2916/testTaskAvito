@@ -9,17 +9,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.example.testtaskavito.data.Broacast
 import com.example.testtaskavito.domain.Actor
 import com.example.testtaskavito.domain.GetActorsUseCase
+import com.example.testtaskavito.domain.GetPostersUseCase
 import com.example.testtaskavito.domain.GetReviewsUseCase
+import com.example.testtaskavito.domain.Poster
 import com.example.testtaskavito.domain.Review
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -30,6 +29,7 @@ class MovieDetailViewModel @Inject constructor(
     private val queryGetMoviesUseCaseProvider: GetMoviesUseCase,
     private val getActorsUseCase: GetActorsUseCase,
     private val getReviewsUseCase: GetReviewsUseCase,
+    private val getPostersUseCase: GetPostersUseCase
 ) : ViewModel() {
     private var idMovie = 0
 
@@ -85,6 +85,10 @@ class MovieDetailViewModel @Inject constructor(
 
     val movie = MutableSharedFlow<Movie>(0)
 
+    val posters = MutableSharedFlow<List<Poster>>(0)
+
+
+
     val isLoadingFlow = MutableSharedFlow<Boolean>(0)
     val isErrorFlow = MutableSharedFlow<Boolean>(0)
 
@@ -92,9 +96,13 @@ class MovieDetailViewModel @Inject constructor(
     fun getMovie(idMovie: Int) {
         this.idMovie = idMovie
         viewModelScope.launch {
+
             try {
 
                 val movie1 = queryGetMoviesUseCaseProvider.getMovieForID(idMovie)
+                Log.e("DetailAdapter", movie1.toString())
+                val poster = getPostersUseCase.getPostersByID(idMovie, 15)
+                Log.e("DetailAdapter", poster.toString())
                 if (movie1 == Movie.DEFAULT_MOVIE) {
                     Broacast.pushError("Загрузка не удалась")
                     isErrorFlow.emit(true)
@@ -107,6 +115,9 @@ class MovieDetailViewModel @Inject constructor(
                     isErrorFlow.emit(false)
                     movie.emit(
                         movie1
+                    )
+                    posters.emit(
+                        poster
                     )
                 }
             } catch (ex: Exception) {

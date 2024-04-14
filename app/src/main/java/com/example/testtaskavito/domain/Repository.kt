@@ -22,4 +22,6 @@ interface Repository {
 
 
     suspend fun getMovieForID(idServer: Int): Movie
+
+    suspend fun getPostersByID(idServer: Int, countPosters: Int): List<Poster>
 }

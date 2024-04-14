@@ -42,7 +42,7 @@ class ActorsAdapter : PagingDataAdapter<Actor, ActorViewHolder>(ActorDiffItemCal
 }
 
 
-//Одинаковые объекты
+//TODO
 object ActorDiffItemCallback : DiffUtil.ItemCallback<Actor>() {
 
     override fun areItemsTheSame(oldItem: Actor, newItem: Actor): Boolean {
