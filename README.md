@@ -7,12 +7,12 @@
 
 ## Запросы
 Для запросов используется класс *MoviesService.kt*, в котором получаются слудующие запросы: 
-1. **GET запрос для главной страницы**: `` 
-   URL (без фильтрации)--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1 ``
-   URL (фильтр по году)--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&year=2022 ``
-   URL (фильтр по возрастному рейтингу)--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&&ageRating=18 ``
-   URL (фильтр по наименованию стран )--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&countries.name=Россия ``
-   URL (со всеми фильтрами )--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&year=2022&ageRating=18&countries.name=Россия ``
+1. **GET запрос для главной страницы**: 
+   URL (без фильтрации)--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1  
+   URL (фильтр по году)--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&year=2022  
+   URL (фильтр по возрастному рейтингу)--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&&ageRating=18  
+   URL (фильтр по наименованию стран )--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&countries.name=Россия  
+   URL (со всеми фильтрами )--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&year=2022&ageRating=18&countries.name=Россия  
  
 
 2. **Get запрос для поиска по наименованию** 
