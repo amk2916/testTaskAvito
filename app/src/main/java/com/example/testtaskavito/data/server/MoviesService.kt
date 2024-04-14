@@ -14,8 +14,7 @@ interface MoviesService {
         @Query("limit") @IntRange(from = 1, to = 50) limit: Int = 30,
         @Query("countries.name") countryName: String? = null,
         @Query("year") year: Int? =  null,
-        @Query("ageRating") ageRating: Int? = null
-      //  @Query("countries.name") name: String
+        @Query("ageRating") ageRating: Int? = null,
     ): Response<MovieModel>
 
     @GET("v1.4/movie/search")

@@ -58,12 +58,22 @@ class MoviesListFragment : Fragment() {
         return inflater.inflate(R.layout.movies_list, container, false)
     }
 
+    val whather = object : TextWatcher {
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            viewModel.search(s.toString())
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int)= Unit
+        override fun afterTextChanged(s: Editable?) = Unit
+    }
+
+private var search: EditText? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         component.inject(this)
 
-        val search = view.findViewById<EditText>(R.id.searchET)
+        search = view.findViewById<EditText>(R.id.searchET)
 
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerFilms)
@@ -78,7 +88,7 @@ class MoviesListFragment : Fragment() {
 
             parentFragmentManager
                 .beginTransaction()
-                .add(R.id.fragmentContainer, fragment)
+                .replace(R.id.fragmentContainer, fragment)
                 .addToBackStack("")
                 .commit()
 
@@ -95,29 +105,10 @@ class MoviesListFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.movies
-                    .collectLatest(moviesAdapter::submitData)
+                    .onEach(moviesAdapter::submitData)
+                    .launchIn(this)
             }
         }
-
-
-
-
-        search.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                null
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.search(s.toString())
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                null
-            }
-
-        })
-
-
 
         Broacast.errorUpdates
             .onEach {
@@ -142,11 +133,7 @@ class MoviesListFragment : Fragment() {
             } else {
                 yearET.toInt()
             }
-            val newValueAgeRating = if (ageRatingET == null || ageRatingET == "") {
-                null
-            } else {
-                ageRatingET.toInt()
-            }
+            val newValueAgeRating = ageRatingET?.toIntOrNull()
 
             val newValueNameCountry = if (nameCountryET == null || nameCountryET == "") {
                 null
@@ -158,10 +145,20 @@ class MoviesListFragment : Fragment() {
                 nameCountry = newValueNameCountry
                 year = newValueYear
                 ageRating = newValueAgeRating
-                viewModel.getWithFilter(nameCountry, ageRating, year)
+                viewModel.getWithFilter(Filter(nameCountry, ageRating, year))
             }
 
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        search?.addTextChangedListener(whather)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        search?.removeTextChangedListener(whather)
     }
 
     private fun setupAdapter(recyclerView: RecyclerView) {

@@ -15,11 +15,6 @@ class FilterFragment : Fragment() {
     private var ageRating: String = ""
     private var year: String = ""
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        parseParam()
-    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,6 +31,8 @@ class FilterFragment : Fragment() {
             val yearET = findViewById<EditText>(R.id.yearET)
             val buttonOk = findViewById<Button>(R.id.okButton)
             val buttonCancelFilters = findViewById<Button>(R.id.cancel_button)
+
+            parseParam()
 
             nameCountryET.setText(nameCountry)
             ageRatingET.setText(ageRating)
@@ -66,7 +63,7 @@ class FilterFragment : Fragment() {
             val paramsNameCountry  = getString(NAME_COUNTRY)
             val paramsYear  = getString(YEAR)
             val paramsAgeRating  = getString(AGE_RATING)
-
+            Log.e("filter", paramsYear.toString())
             if(paramsNameCountry != null) nameCountry = paramsNameCountry
             if(paramsYear != null) year = paramsYear.toString()
             if(paramsAgeRating != null) ageRating = paramsAgeRating.toString()
@@ -82,8 +79,8 @@ class FilterFragment : Fragment() {
             return FilterFragment().apply {
                 arguments = Bundle().apply {
                     putString(NAME_COUNTRY, nameCountry)
-                    putInt(YEAR, year?:-1)
-                    putInt(AGE_RATING, ageRating?:-1)
+                    putString(YEAR, year?.toString())
+                    putString(AGE_RATING, ageRating?.toString())
                 }
             }
         }

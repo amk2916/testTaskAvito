@@ -15,7 +15,7 @@ class MoviesRemoteMediator(
     private val movieDao: MoviesListDao,
     private val nameCountry: String? = null,
     private val year: Int? = null,
-    private val ageRating: Int? = null
+    private val ageRating: Int? = null,
 ) : RemoteMediator<Int, ModelForListLocal>() {
 
     override suspend fun load(

@@ -28,11 +28,10 @@ class FilmByNamePageSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ModelForListLocal> {
 
-        if (flagInternet) {
+        //if (flagInternet) {
 
             val page: Int = params.key ?: 1
             val pageSize: Int = params.loadSize.coerceAtMost(10)
-
 
             val response = apiService.getFilmByName(page, pageSize, query)
 
@@ -41,14 +40,10 @@ class FilmByNamePageSource(
 
                 val nextKey = if (movies.size < pageSize) null else page + 1
                 val prevKey = if (page == 1) null else page - 1
-
-
                 return LoadResult.Page(movies, prevKey, nextKey)
-            } else {
-                Broacast.pushError(response.message())
-                return LoadResult.Error(HttpException(response))
             }
-        } else {
+            else Broacast.pushError(response.message())
+
             try {
                 val page = params.key ?: 1
                 val pageSize = params.loadSize
@@ -84,7 +79,7 @@ class FilmByNamePageSource(
             } catch (ex: Exception) {
                 return LoadResult.Error(ex)
             }
-        }
+      //  }
 
     }
 }
