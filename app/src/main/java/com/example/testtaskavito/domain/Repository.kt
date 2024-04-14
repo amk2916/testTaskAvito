@@ -21,5 +21,5 @@ interface Repository {
     fun getReviewForID(idMovie: Int):  PagingSource<Int, Review>
 
 
-    suspend fun getMovieForID(idServer: Int): Movie?
+    suspend fun getMovieForID(idServer: Int): Movie
 }

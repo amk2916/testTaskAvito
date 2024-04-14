@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -18,6 +19,7 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testtaskavito.App
 import com.example.testtaskavito.R
+import com.example.testtaskavito.data.Broacast
 import com.example.testtaskavito.presentation.firstScreen.MoviesLoadStateAdapter
 import com.example.testtaskavito.presentation.ViewModelFactory
 import com.squareup.picasso.Picasso
@@ -73,10 +75,17 @@ class SecondScreen : Fragment() {
         val description = view.findViewById<TextView>(R.id.Description)
         val nameMovie = view.findViewById<TextView>(R.id.nameMovie)
         val progressBar = view.findViewById<View>(R.id.progress_bar)
+        val error_message = view.findViewById<View>(R.id.error_message)
 
         val emptyActorTextView = view.findViewById<TextView>(R.id.emptyActorTextView)
         val emptyCommentTextView = view.findViewById<TextView>(R.id.emptyCommentTextView)
 
+        Broacast.errorUpdates
+            .onEach {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG)
+                    .show()
+            }
+            .launchIn(lifecycleScope)
 
         recyclerActor.adapter = actorAdapter
 
@@ -117,6 +126,10 @@ class SecondScreen : Fragment() {
 
         viewModel.isLoadingFlow.onEach {
             progressBar.isVisible = it
+        }.launchIn(lifecycleScope)
+
+        viewModel.isErrorFlow.onEach {
+            error_message.isVisible = it
         }.launchIn(lifecycleScope)
 
         viewModel.movie

@@ -10,6 +10,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.testtaskavito.data.Broacast
 import com.example.testtaskavito.domain.Actor
 import com.example.testtaskavito.domain.GetActorsUseCase
 import com.example.testtaskavito.domain.GetReviewsUseCase
@@ -29,7 +30,7 @@ class MovieDetailViewModel @Inject constructor(
     private val queryGetMoviesUseCaseProvider: GetMoviesUseCase,
     private val getActorsUseCase: GetActorsUseCase,
     private val getReviewsUseCase: GetReviewsUseCase,
-) : ViewModel(){
+) : ViewModel() {
     private var idMovie = 0
 
     private val _review: MutableSharedFlow<PagingData<Review>> = MutableSharedFlow(
@@ -39,7 +40,7 @@ class MovieDetailViewModel @Inject constructor(
     )
     val review: SharedFlow<PagingData<Review>> = _review.asSharedFlow()
 
-    private val _actors:  MutableSharedFlow<PagingData<Actor>> = MutableSharedFlow(
+    private val _actors: MutableSharedFlow<PagingData<Actor>> = MutableSharedFlow(
         1,
         1,
         onBufferOverflow = BufferOverflow.DROP_LATEST
@@ -51,8 +52,8 @@ class MovieDetailViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             newPagerActor(id)
                 .flow
-                .onEach{
-                    Log.e("TEST" ,"start: $it ")
+                .onEach {
+                    Log.e("TEST", "start: $it ")
                     _actors.emit(it)
                 }
                 .launchIn(viewModelScope)
@@ -60,7 +61,7 @@ class MovieDetailViewModel @Inject constructor(
             newPagerReview(id)
                 .flow
                 .onEach {
-                    Log.e("TAG", "start: $it " )
+                    Log.e("TAG", "start: $it ")
                     _review.emit(it)
                 }
                 .launchIn(viewModelScope)
@@ -85,16 +86,35 @@ class MovieDetailViewModel @Inject constructor(
     val movie = MutableSharedFlow<Movie>(0)
 
     val isLoadingFlow = MutableSharedFlow<Boolean>(0)
-    fun getMovie(idMovie: Int){
+    val isErrorFlow = MutableSharedFlow<Boolean>(0)
+
+    //TODO: все волшкбные числа/строки надо бы вынести в отдельные переменные
+    fun getMovie(idMovie: Int) {
         this.idMovie = idMovie
         viewModelScope.launch {
-            val movie1 =  queryGetMoviesUseCaseProvider.getMovieForID(idMovie)
-            start(idMovie)
-            Log.e("emit", movie1.toString())
-            isLoadingFlow.emit(false)
-            movie.emit(
-               movie1!!
-            )
+            try {
+
+                val movie1 = queryGetMoviesUseCaseProvider.getMovieForID(idMovie)
+                if (movie1 == Movie.DEFAULT_MOVIE) {
+                    Broacast.pushError("Загрузка не удалась")
+                    isErrorFlow.emit(true)
+                    isLoadingFlow.emit(false)
+
+                } else {
+                    start(idMovie)
+                    Log.e("emit", movie1.toString())
+                    isLoadingFlow.emit(false)
+                    isErrorFlow.emit(false)
+                    movie.emit(
+                        movie1
+                    )
+                }
+            } catch (ex: Exception) {
+                isErrorFlow.emit(true)
+                isLoadingFlow.emit(false)
+                Broacast.pushError(ex.message.toString())
+            }
+
 
         }
     }

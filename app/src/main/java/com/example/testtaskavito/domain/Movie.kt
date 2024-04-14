@@ -25,4 +25,19 @@ data class Movie(
     //val typeFilms: Int,
     //val countSeasons: Int?,
     val movieLength: String
-)
+){
+    companion object{
+        val DEFAULT_MOVIE = Movie(
+            0,
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            0,
+            ""
+        )
+
+    }
+}

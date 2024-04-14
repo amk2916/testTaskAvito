@@ -76,7 +76,8 @@ class RepositoryImpl @Inject constructor(
         return pageSource
     }
 
-    override suspend fun getMovieForID(idServer: Int): Movie? {
-        return moviesService.getFilmForId(idServer).body()?.toMovie()
+    override suspend fun getMovieForID(idServer: Int): Movie {
+        return moviesService.getFilmForId(idServer).body()?.toMovie() ?: Movie.DEFAULT_MOVIE
+
     }
 }

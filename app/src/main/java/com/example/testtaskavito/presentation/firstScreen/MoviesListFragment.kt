@@ -126,6 +126,8 @@ class MoviesListFragment : Fragment() {
             }
             .launchIn(lifecycleScope)
 
+
+        // временное решение для фильтров
         parentFragmentManager.setFragmentResultListener(
             "requestKey",
             viewLifecycleOwner
