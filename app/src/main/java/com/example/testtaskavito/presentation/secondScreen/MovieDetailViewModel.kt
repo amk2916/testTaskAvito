@@ -38,7 +38,6 @@ class MovieDetailViewModel @Inject constructor(
         onBufferOverflow = BufferOverflow.DROP_LATEST
     )
     val review: SharedFlow<PagingData<Review>> = _review.asSharedFlow()
-       //newPagerReview().flow.stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
 
     private val _actors:  MutableSharedFlow<PagingData<Actor>> = MutableSharedFlow(
         1,
@@ -47,7 +46,6 @@ class MovieDetailViewModel @Inject constructor(
     )
 
     val actors: SharedFlow<PagingData<Actor>> = _actors.asSharedFlow()
-       // newPagerActor().flow.stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
 
     private fun start(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {

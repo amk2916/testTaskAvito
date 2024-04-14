@@ -44,7 +44,7 @@ class MoviesLoadStateAdapter : LoadStateAdapter<MoviesLoadStateAdapter.ItemViewH
         private val view: View
     ) : ItemViewHolder(view) {
         override fun bind(loadState: LoadState) {
-            // Do nothing
+            //TODO()
         }
     }
 

@@ -14,6 +14,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testtaskavito.App
 import com.example.testtaskavito.R
@@ -21,6 +22,7 @@ import com.example.testtaskavito.presentation.firstScreen.MoviesLoadStateAdapter
 import com.example.testtaskavito.presentation.ViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -30,8 +32,8 @@ class SecondScreen : Fragment() {
     private var idItem = UNDEFINED_ID
 
     private lateinit var viewModel: MovieDetailViewModel
-    private  var actorAdapter: ActorsAdapter  = ActorsAdapter()
-    private  var commentAdapter: ReviewsAdapter = ReviewsAdapter()
+    private var actorAdapter: ActorsAdapter = ActorsAdapter()
+    private var commentAdapter: ReviewsAdapter = ReviewsAdapter()
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -56,41 +58,13 @@ class SecondScreen : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         component.injectSecond(this)
-        viewModel = ViewModelProvider(this, viewModelFactory,)[MovieDetailViewModel::class.java]
 
+        viewModel = ViewModelProvider(this, viewModelFactory)[MovieDetailViewModel::class.java]
         viewModel.getMovie(idItem)
 
 
         val recyclerActor = view.findViewById<RecyclerView>(R.id.listActors)
         val recyclerComment = view.findViewById<RecyclerView>(R.id.listComments)
-        recyclerActor.adapter = actorAdapter
-        recyclerComment.adapter = commentAdapter.withLoadStateHeaderAndFooter(
-            footer = MoviesLoadStateAdapter(),
-            header = MoviesLoadStateAdapter()
-        )
-
-
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-                viewModel.review
-                    .onEach {
-                        Log.e("TAG", "onViewCreated: $it",)
-                        commentAdapter.submitData(it)
-                    }
-                    .launchIn(this)
-
-                viewModel.actors
-                    .onEach {
-                        Log.e("TAG", "onViewCreated: $it",)
-                        actorAdapter.submitData(it)
-                    }
-                    .launchIn(this)
-            }
-        }
-
-
         val poster = view.findViewById<ImageView>(R.id.posterView)
         val ratingKp = view.findViewById<TextView>(R.id.ratingKp)
         val ratingImdb = view.findViewById<TextView>(R.id.ratingImdb)
@@ -98,11 +72,48 @@ class SecondScreen : Fragment() {
         val filmDuration = view.findViewById<TextView>(R.id.filmDuration)
         val description = view.findViewById<TextView>(R.id.Description)
         val nameMovie = view.findViewById<TextView>(R.id.nameMovie)
-
-
-
-
         val progressBar = view.findViewById<View>(R.id.progress_bar)
+
+        val emptyActorTextView = view.findViewById<TextView>(R.id.emptyActorTextView)
+        val emptyCommentTextView = view.findViewById<TextView>(R.id.emptyCommentTextView)
+
+
+        recyclerActor.adapter = actorAdapter
+
+        recyclerComment.adapter = commentAdapter
+
+        //TODO: поправить если успею
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                viewModel.review
+                    .onEach {
+                        commentAdapter.submitData(PagingData.empty())
+                        if (commentAdapter.itemCount == 0) {
+                            emptyCommentTextView.isVisible = true
+                            recyclerComment.isVisible = false
+                        } else {
+                            emptyCommentTextView.isVisible = false
+                            recyclerComment.isVisible = true
+                        }
+                    }
+                    .launchIn(this)
+
+                viewModel.actors
+                    .onEach {
+                        actorAdapter.submitData(it)
+                        if (actorAdapter.itemCount == 0) {
+                            emptyActorTextView.isVisible = true
+                            recyclerActor.isVisible = false
+                        } else {
+                            emptyActorTextView.isVisible = false
+                            recyclerActor.isVisible = true
+                        }
+                    }
+                    .launchIn(this)
+            }
+        }
+
 
         viewModel.isLoadingFlow.onEach {
             progressBar.isVisible = it
@@ -110,12 +121,13 @@ class SecondScreen : Fragment() {
 
         viewModel.movie
             .onEach {
-            nameMovie.text = it.nameFilm
+                nameMovie.text = it.nameFilm
 
-            Picasso.get()
-                .load(it.posters)
-                .error(R.drawable.default_poster)
-                .into(poster)
+                Picasso.get()
+                    .load(it.posters)
+                    .placeholder(R.drawable.no_data)
+                    .error(R.drawable.default_poster)
+                    .into(poster)
 
                 ratingKp.text = it.ratingKp
                 ratingImdb.text = it.ratingIMDB
@@ -123,13 +135,9 @@ class SecondScreen : Fragment() {
                 filmDuration.text = it.movieLength
                 description.text = it.description
 
-        }.launchIn(lifecycleScope)
-//        viewModel.start(idItem)
-
+            }.launchIn(lifecycleScope)
 
     }
-
-
 
 
     private fun parseParam() {
