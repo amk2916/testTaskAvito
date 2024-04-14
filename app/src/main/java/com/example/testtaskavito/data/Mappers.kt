@@ -46,11 +46,19 @@ fun Docs.toCachedMovie(page: Int): ModelForListLocal{
 fun MovieModelItem.toMovie() : Movie{
     return Movie(
         idFilm = id ?: 0,
-        nameFilm = name ?:"",
-        description = description ?: "",
-        rating = rating,
+        nameFilm = name ?: "Нет наименования",
+        description = description ?: "Нет описания",
+        ratingKp = "КП: ${parseRating(rating.kp)}",
+        ratingIMDB = "IMDB: ${parseRating(rating.imdb)}",
+        ratingTMDB = "TMDB: ${parseRating(rating.tmdb)}",
         posters = poster.url ?: "",
         yearFilm = year ?: 0,
-        movieLength = movieLength?.toString() ?: "0"
+        movieLength = "${movieLength?.toString() ?: "0"} минут"
     )
+}
+
+fun parseRating(rating: Float?):String{
+    if (rating==null) return "--"
+    val newRating = BigDecimal(rating.toDouble())
+    return newRating.setScale(1,RoundingMode.DOWN).toString()
 }

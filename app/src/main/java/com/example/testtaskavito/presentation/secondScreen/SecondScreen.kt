@@ -117,9 +117,9 @@ class SecondScreen : Fragment() {
                 .error(R.drawable.default_poster)
                 .into(poster)
 
-                ratingKp.text = it.rating.kp.toString()
-                ratingImdb.text = it.rating.imdb.toString()
-                ratingTmdb.text = it.rating.tmdb.toString()
+                ratingKp.text = it.ratingKp
+                ratingImdb.text = it.ratingIMDB
+                ratingTmdb.text = it.ratingTMDB
                 filmDuration.text = it.movieLength
                 description.text = it.description
 
