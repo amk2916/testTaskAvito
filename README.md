@@ -12,10 +12,12 @@
    URL (фильтр по году)--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&year=2022  
    URL (фильтр по возрастному рейтингу)--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&&ageRating=18  
    URL (фильтр по наименованию стран )--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&countries.name=Россия  
-   URL (со всеми фильтрами )--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&year=2022&ageRating=18&countries.name=Россия  
+   URL (со всеми фильтрами )--> https://api.kinopoisk.dev/v1.4/movie?page=1&limit=1&year=2022&ageRating=18&countries.name=Россия
+   ![image](https://github.com/amk2916/testTaskAvito/assets/128518853/70d841a5-eee3-4bcf-963c-1bc7783eddb9)
+
  
 
-2. **Get запрос для поиска по наименованию** 
+3. **Get запрос для поиска по наименованию** 
    URL --> https://api.kinopoisk.dev/v1.4/movie/search?page=1&limit=10&query=doctor
 
 
