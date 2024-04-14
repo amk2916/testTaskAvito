@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="cornerTextViewRating">5dp</dimen>
+    <dimen name="postersHeight">160dp</dimen>
 </resources>

@@ -1,10 +1,13 @@
 package com.example.testtaskavito.presentation.firstScreen
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -15,15 +18,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.example.testtaskavito.App
 import com.example.testtaskavito.R
 import com.example.testtaskavito.data.Broacast
-import com.example.testtaskavito.presentation.MoviesAdapter
-import com.example.testtaskavito.presentation.MoviesLoadStateAdapter
 import com.example.testtaskavito.presentation.ViewModelFactory
 import com.example.testtaskavito.presentation.secondScreen.SecondScreen
 import kotlinx.coroutines.Dispatchers
@@ -60,22 +58,37 @@ class MoviesListFragment : Fragment() {
         return inflater.inflate(R.layout.movies_list, container, false)
     }
 
+    val whather = object : TextWatcher {
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            viewModel.search(s.toString())
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int)= Unit
+        override fun afterTextChanged(s: Editable?) = Unit
+    }
+
+private var search: EditText? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         component.inject(this)
+
+        search = view.findViewById<EditText>(R.id.searchET)
+
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerFilms)
         val progress = view.findViewById<ProgressBar>(R.id.progress)
 
         val imageView = view.findViewById<ImageView>(R.id.filterImage)
 
+
+
         imageView.setOnClickListener {
             val fragment = FilterFragment.instance(nameCountry, year, ageRating)
 
             parentFragmentManager
                 .beginTransaction()
-                .add(R.id.fragmentContainer, fragment)
+                .replace(R.id.fragmentContainer, fragment)
                 .addToBackStack("")
                 .commit()
 
@@ -92,10 +105,10 @@ class MoviesListFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.movies
-                    .collectLatest(moviesAdapter::submitData)
+                    .onEach(moviesAdapter::submitData)
+                    .launchIn(this)
             }
         }
-
 
         Broacast.errorUpdates
             .onEach {
@@ -104,54 +117,53 @@ class MoviesListFragment : Fragment() {
             }
             .launchIn(lifecycleScope)
 
+
+        // временное решение для фильтров
         parentFragmentManager.setFragmentResultListener(
             "requestKey",
             viewLifecycleOwner
         ) { requestKey, bundle ->
             Log.e("setFragmentResultListener", "1")
-            var nameCountryET = bundle.getString("nameCountry")
+            val nameCountryET = bundle.getString("nameCountry")
             val ageRatingET = bundle.getString("ageRating")
             val yearET = bundle.getString("year")
 
-            var newValueNameCountry = ""
-            var newValueAgeRating = ""
-            var newValueYear = ""
+            val newValueYear = if (yearET == null || yearET == "") {
+                null
+            } else {
+                yearET.toInt()
+            }
+            val newValueAgeRating = ageRatingET?.toIntOrNull()
 
-            if (nameCountryET != null || nameCountryET != "") {
-                if (nameCountryET != null) {
-                    newValueNameCountry = nameCountryET
-                }
-            }
-            if (ageRatingET != null || ageRatingET != "") {
-                if (ageRatingET != null) {
-                    newValueAgeRating = ageRatingET
-                }
-            }
-            if (yearET != null || yearET != "") {
-                if (yearET != null) {
-                    newValueYear = yearET
-                }
+            val newValueNameCountry = if (nameCountryET == null || nameCountryET == "") {
+                null
+            } else {
+                nameCountryET
             }
 
-            if (newValueNameCountry != "" || newValueAgeRating != "" || newValueYear != "") {
-                if (newValueYear.toInt() != year || newValueAgeRating.toInt() != ageRating || newValueNameCountry != nameCountry) {
-                    nameCountry = if (newValueAgeRating.isEmpty()) null else newValueNameCountry
-                    year = newValueYear.toInt()
-                    ageRating = if (newValueAgeRating.isEmpty()) null else newValueAgeRating.toInt()
-                    viewModel.getWithFilter(nameCountry, ageRating, year)
-                }
+            if (newValueYear != year || newValueAgeRating != ageRating || newValueNameCountry != nameCountry) {
+                nameCountry = newValueNameCountry
+                year = newValueYear
+                ageRating = newValueAgeRating
+                viewModel.getWithFilter(Filter(nameCountry, ageRating, year))
             }
-
 
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        search?.addTextChangedListener(whather)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        search?.removeTextChangedListener(whather)
+    }
 
     private fun setupAdapter(recyclerView: RecyclerView) {
         val dimenCornerRatingTV = resources.getDimension(R.dimen.cornerTextViewRating)
         val displayMetrics = resources.displayMetrics
-
-
 
         moviesAdapter = MoviesAdapter(displayMetrics, dimenCornerRatingTV)
         moviesAdapter.onClickListenerItem = {
@@ -167,42 +179,10 @@ class MoviesListFragment : Fragment() {
             header = MoviesLoadStateAdapter()
         )
 
-//        recyclerView.addOnScrollListener(object : OnScrollListener() {
-//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                super.onScrollStateChanged(recyclerView, newState)
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                    val layoutManager = recyclerView.layoutManager as GridLayoutManager
-//                    val totalItemCount = layoutManager.itemCount
-//                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-//
-//                    // Если пользователь долистал до конца списка
-//                    if (lastVisibleItemPosition >= totalItemCount - 1) {
-//                        moviesAdapter.retry()
-//
-//                    }
-//                }
-//            }
-//        })
     }
 
     companion object {
         fun instanceMoviesListFragment() = MoviesListFragment()
     }
-
-    override fun onPause() {
-        super.onPause()
-        Log.e("MoviesListFragment", "onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.e("MoviesListFragment", "OnStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.e("MoviesListFragment", "ondestroy")
-    }
-
 
 }

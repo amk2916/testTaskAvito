@@ -3,7 +3,7 @@
     android:id="@+id/commentCard"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="250dp"
-    android:layout_height="120dp"
+    android:layout_height="180dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
@@ -34,7 +34,8 @@
             android:layout_marginTop="2dp"
             android:layout_marginStart="10dp"
             android:text="Неизвестный гражданин"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

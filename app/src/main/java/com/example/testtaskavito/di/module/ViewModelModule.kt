@@ -3,7 +3,7 @@ package com.example.testtaskavito.di.module
 import androidx.lifecycle.ViewModel
 import com.example.testtaskavito.di.ViewModelKey
 import com.example.testtaskavito.presentation.firstScreen.MoviesViewModel
-import com.example.testtaskavito.presentation.secondScreen.MovieItemViewModel
+import com.example.testtaskavito.presentation.secondScreen.MovieDetailViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -17,8 +17,8 @@ interface ViewModelModule {
     fun bindViewModel(impl: MoviesViewModel): ViewModel
 
     @IntoMap
-    @ViewModelKey(MovieItemViewModel::class)
+    @ViewModelKey(MovieDetailViewModel::class)
     @Binds
-    fun bindViewModelMovieItem(impl: MovieItemViewModel): ViewModel
+    fun bindViewModelMovieItem(impl: MovieDetailViewModel): ViewModel
 
 }

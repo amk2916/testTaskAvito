@@ -2,8 +2,8 @@ package com.example.testtaskavito.domain
 
 import com.google.gson.annotations.SerializedName
 
-data class Review(
+data class Actor(
     var id: Int? = null,
-    var review: String? = null,
-    var author: String? = null,
+    var name: String? = null,
+    var photo: String? = null,
 )

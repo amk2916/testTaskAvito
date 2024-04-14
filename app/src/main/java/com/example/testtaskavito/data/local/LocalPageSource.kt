@@ -7,7 +7,10 @@ import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class LocalPageSource @Inject constructor(
-    private var dao: MoviesListDao
+    private var dao: MoviesListDao,
+    private var countryName: String?,
+    private val ratingAge: Int?,
+    private val year: Int?
 ) : PagingSource<Int, ModelForListLocal>() {
     override fun getRefreshKey(state: PagingState<Int, ModelForListLocal>): Int? {
         Log.e(" PagingSource getRefreshKey", state.toString())
@@ -30,7 +33,11 @@ class LocalPageSource @Inject constructor(
             val counter = 10
             var movies: List<ModelForListLocal> = emptyList()
             var i = 0
-            movies = dao.getMoviesByPage(offset, pageSize)
+            // TODO: Придумал временное решение для того чтобы избавится от бага (вставка в MovieRemoteMediator)
+            // проходит дольше чем вызов select, поэтому приходится ждать пока закэшируется
+            // по идее можно делать флоу на событие окончания вставки и подписаться на него
+            // данное решение очень замедляет работу
+            movies = dao.getMoviesByPage(offset, pageSize, year, ratingAge, countryName)
             if (movies.isEmpty()) {
                 while (movies.isEmpty() || i < counter) {
                     movies = dao.getMoviesByPage(offset, pageSize)

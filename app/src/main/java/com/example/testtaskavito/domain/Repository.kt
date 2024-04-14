@@ -11,5 +11,17 @@ interface Repository {
         year: Int? ,
         ageRating: Int?
     ): Flow<PagingData<ModelForListLocal>>
-    suspend fun getMovieForID(idServer: Int?/*, idLocal: Long?*/): Movie?
+
+    fun getMoviewByName(
+        name: String? = null,
+        flagInternet: Boolean
+    ) :  PagingSource<Int, ModelForListLocal>
+
+    fun getActorsForID(idMovie: Int): PagingSource<Int, Actor>
+    fun getReviewForID(idMovie: Int):  PagingSource<Int, Review>
+
+
+    suspend fun getMovieForID(idServer: Int): Movie
+
+    suspend fun getPostersByID(idServer: Int, countPosters: Int): List<Poster>
 }

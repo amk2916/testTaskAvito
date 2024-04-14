@@ -1,6 +1,7 @@
 package com.example.testtaskavito.presentation.firstScreen
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +15,6 @@ class FilterFragment : Fragment() {
     private var ageRating: String = ""
     private var year: String = ""
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        parseParam()
-    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,12 +30,16 @@ class FilterFragment : Fragment() {
             val ageRatingET = findViewById<EditText>(R.id.ageRatingET)
             val yearET = findViewById<EditText>(R.id.yearET)
             val buttonOk = findViewById<Button>(R.id.okButton)
+            val buttonCancelFilters = findViewById<Button>(R.id.cancel_button)
+
+            parseParam()
 
             nameCountryET.setText(nameCountry)
             ageRatingET.setText(ageRating)
             yearET.setText(year)
 
             buttonOk.setOnClickListener {
+                Log.e("filter", nameCountryET.text.toString())
                 val resultBundle = Bundle().apply {
                     putString("nameCountry" ,nameCountryET.text.toString())
                     putString("ageRating", ageRatingET.text.toString())
@@ -47,6 +47,12 @@ class FilterFragment : Fragment() {
                 }
                 parentFragmentManager.setFragmentResult("requestKey", resultBundle)
                 parentFragmentManager.popBackStack()
+            }
+
+            buttonCancelFilters.setOnClickListener {
+                nameCountryET.setText("")
+                ageRatingET.setText("")
+                yearET.setText("")
             }
         }
     }
@@ -57,7 +63,7 @@ class FilterFragment : Fragment() {
             val paramsNameCountry  = getString(NAME_COUNTRY)
             val paramsYear  = getString(YEAR)
             val paramsAgeRating  = getString(AGE_RATING)
-
+            Log.e("filter", paramsYear.toString())
             if(paramsNameCountry != null) nameCountry = paramsNameCountry
             if(paramsYear != null) year = paramsYear.toString()
             if(paramsAgeRating != null) ageRating = paramsAgeRating.toString()
@@ -73,8 +79,8 @@ class FilterFragment : Fragment() {
             return FilterFragment().apply {
                 arguments = Bundle().apply {
                     putString(NAME_COUNTRY, nameCountry)
-                    putInt(YEAR, year?:-1)
-                    putInt(AGE_RATING, ageRating?:-1)
+                    putString(YEAR, year?.toString())
+                    putString(AGE_RATING, ageRating?.toString())
                 }
             }
         }

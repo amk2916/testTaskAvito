@@ -10,7 +10,7 @@ class GetMoviesUseCase @Inject constructor(
     private val repository: Repository
 ) {
 
-    suspend fun getMovieForID(idServer: Int): Movie?{
+    suspend fun getMovieForID(idServer: Int): Movie{
         return repository.getMovieForID(idServer)
     }
 
@@ -21,4 +21,11 @@ class GetMoviesUseCase @Inject constructor(
     ) : Flow<PagingData<ModelForListLocal>> {
         return repository.getMovies(countryName,year , ageRating)
     }
+
+     fun getMovieByName(
+         name: String? = null,
+         flagInternet: Boolean
+     ) :  PagingSource<Int, ModelForListLocal>{
+         return repository.getMoviewByName(name, flagInternet)
+     }
 }
