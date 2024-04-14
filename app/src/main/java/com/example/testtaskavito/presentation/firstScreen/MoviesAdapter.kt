@@ -1,4 +1,4 @@
-package com.example.testtaskavito.presentation
+package com.example.testtaskavito.presentation.firstScreen
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -95,8 +95,8 @@ class MoviesAdapter(
     }
 
 }
-
-private object MovieDiffItemCallback : DiffUtil.ItemCallback<ModelForListLocal>() {
+//Почему работает только объектом
+object MovieDiffItemCallback : DiffUtil.ItemCallback<ModelForListLocal>() {
 
     override fun areItemsTheSame(oldItem: ModelForListLocal, newItem: ModelForListLocal): Boolean {
         return oldItem.id == newItem.id

@@ -45,7 +45,7 @@ class RepositoryImpl @Inject constructor(
         return Pager(
             config = PagingConfig(pageSize = 16),
             remoteMediator = remoteMediator,
-            pagingSourceFactory = { LocalPageSource(movieDao) }
+            pagingSourceFactory = { LocalPageSource(movieDao, countryName, ageRating, year ) }
         ).flow
     }
 

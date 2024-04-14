@@ -7,7 +7,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MoviesService {
-
+    //
     @GET("v1.4/movie")
     suspend fun getListFilm(
         @Query("page") @IntRange(from = 1) page: Int = 1,
@@ -22,6 +22,7 @@ interface MoviesService {
     suspend fun getFilmForId(
         @Path("id") id: Int
     ) : Response<MovieModelItem>
+
 
     @GET("v1.4/person")
     suspend fun getActorsFilmId(

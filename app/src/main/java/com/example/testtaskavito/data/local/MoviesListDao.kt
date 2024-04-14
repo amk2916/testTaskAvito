@@ -35,10 +35,11 @@ interface MoviesListDao {
      */
     @Query("""
         SELECT * FROM cache_movie_list_model
+        WHERE (:year IS NULL OR year = :year)
         ORDER BY id
         LIMIT :pageSize OFFSET :offset
     """)
-    suspend fun getMoviesByPage(offset: Int, pageSize: Int): List<ModelForListLocal>
+    suspend fun getMoviesByPage(offset: Int, pageSize: Int, year: Int? = null/*, ageRating: Int? = null, ,country: String? = null*/): List<ModelForListLocal>
 
     //todo: просто в лог вызвать
     @Query("SELECT * FROM cache_movie_list_model")

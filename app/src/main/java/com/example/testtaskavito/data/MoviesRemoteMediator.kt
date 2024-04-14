@@ -52,7 +52,8 @@ class MoviesRemoteMediator(
                 currentPage,
                 pageSize,
                 nameCountry,
-                year, ageRating)
+                year,
+                ageRating)
 
             // Проверяем успешность запроса
             if (!response.isSuccessful) {

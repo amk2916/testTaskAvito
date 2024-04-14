@@ -1,4 +1,4 @@
-package com.example.testtaskavito.presentation
+package com.example.testtaskavito.presentation.firstScreen
 
 import android.view.LayoutInflater
 import android.view.View

@@ -8,7 +8,7 @@ import com.example.testtaskavito.domain.Review
 import retrofit2.HttpException
 import javax.inject.Inject
 
-//сделать один общий
+//TODO сделать один общий pageSource
 class ReviewPageSource @Inject constructor(
     private val apiService: MoviesService,
     private val movieId: Int
@@ -24,19 +24,19 @@ class ReviewPageSource @Inject constructor(
 
         val page: Int = params.key ?: 1
 
-        val pageSize: Int = params.loadSize.coerceAtMost(15)
+        val pageSize: Int = params.loadSize.coerceAtMost(10)
 
         val response = apiService.getReviewsFilmId(page, pageSize, movieId)
         response.isSuccessful
 
         if (response.isSuccessful) {
-            val movies = checkNotNull(response.body()).docs.map { it.toDomain() }
+            val review = checkNotNull(response.body()).docs.map { it.toDomain() }
 
-            val nextKey = if (movies.size < pageSize) null else page + 1
+            val nextKey = if (review.size < pageSize) null else page + 1
             val prevKey = if (page == 1) null else page - 1
 
 
-            return LoadResult.Page(movies, prevKey, nextKey)
+            return LoadResult.Page(review, prevKey, nextKey)
         } else {
             Broacast.pushError(response.message())
             return LoadResult.Error(HttpException(response))

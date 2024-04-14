@@ -15,15 +15,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.example.testtaskavito.App
 import com.example.testtaskavito.R
 import com.example.testtaskavito.data.Broacast
-import com.example.testtaskavito.presentation.MoviesAdapter
-import com.example.testtaskavito.presentation.MoviesLoadStateAdapter
 import com.example.testtaskavito.presentation.ViewModelFactory
 import com.example.testtaskavito.presentation.secondScreen.SecondScreen
 import kotlinx.coroutines.Dispatchers
@@ -167,22 +162,6 @@ class MoviesListFragment : Fragment() {
             header = MoviesLoadStateAdapter()
         )
 
-//        recyclerView.addOnScrollListener(object : OnScrollListener() {
-//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                super.onScrollStateChanged(recyclerView, newState)
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                    val layoutManager = recyclerView.layoutManager as GridLayoutManager
-//                    val totalItemCount = layoutManager.itemCount
-//                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-//
-//                    // Если пользователь долистал до конца списка
-//                    if (lastVisibleItemPosition >= totalItemCount - 1) {
-//                        moviesAdapter.retry()
-//
-//                    }
-//                }
-//            }
-//        })
     }
 
     companion object {
