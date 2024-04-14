@@ -33,7 +33,11 @@ class LocalPageSource @Inject constructor(
             val counter = 10
             var movies: List<ModelForListLocal> = emptyList()
             var i = 0
-            movies = dao.getMoviesByPage(offset, pageSize, year/*, ratingAge, countryName*/)
+            // TODO: Придумал временное решение для того чтобы избавится от бага (вставка в MovieRemoteMediator)
+            // проходит дольше чем вызов select, поэтому приходится ждать пока закэшируется
+            // по идее можно делать флоу на событие окончания вставки и подписаться на него
+            // данное решение очень замедляет работу
+            movies = dao.getMoviesByPage(offset, pageSize, year, ratingAge, countryName)
             if (movies.isEmpty()) {
                 while (movies.isEmpty() || i < counter) {
                     movies = dao.getMoviesByPage(offset, pageSize)

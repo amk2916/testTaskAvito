@@ -7,7 +7,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MoviesService {
-    //
+
     @GET("v1.4/movie")
     suspend fun getListFilm(
         @Query("page") @IntRange(from = 1) page: Int = 1,
@@ -17,6 +17,13 @@ interface MoviesService {
         @Query("ageRating") ageRating: Int? = null
       //  @Query("countries.name") name: String
     ): Response<MovieModel>
+
+    @GET("v1.4/movie/search")
+    suspend fun getFilmByName(
+        @Query("page") @IntRange(from = 1) page: Int = 1,
+        @Query("limit") @IntRange(from = 1, to = 50) limit: Int = 30,
+        @Query("query") query:String? = null
+    ):Response<MovieModel>
 
     @GET("v1.4/movie/{id}")
     suspend fun getFilmForId(
@@ -35,10 +42,7 @@ interface MoviesService {
     suspend fun getReviewsFilmId(
         @Query("page") @IntRange(from = 1) page: Int = 1,
         @Query("limit") @IntRange(from = 1, to = 50) limit: Int = 30,
-        @Query("&movieId") movieId: Int? =  null
+        @Query("movieId") movieId: Int? =  null
     ) : Response<Reviews>
-
-
-
 
 }

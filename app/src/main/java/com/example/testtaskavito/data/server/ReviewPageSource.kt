@@ -8,7 +8,7 @@ import com.example.testtaskavito.domain.Review
 import retrofit2.HttpException
 import javax.inject.Inject
 
-//TODO сделать один общий pageSource
+// TODO: Класс почти одинаковый с ActorPageSource, если успею, то надо завести общую часть
 class ReviewPageSource @Inject constructor(
     private val apiService: MoviesService,
     private val movieId: Int

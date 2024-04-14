@@ -12,6 +12,11 @@ interface Repository {
         ageRating: Int?
     ): Flow<PagingData<ModelForListLocal>>
 
+    fun getMoviewByName(
+        name: String? = null,
+        flagInternet: Boolean
+    ) :  PagingSource<Int, ModelForListLocal>
+
     fun getActorsForID(idMovie: Int): PagingSource<Int, Actor>
     fun getReviewForID(idMovie: Int):  PagingSource<Int, Review>
 

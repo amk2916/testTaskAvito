@@ -1,6 +1,7 @@
 package com.example.testtaskavito.presentation.firstScreen
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +41,7 @@ class FilterFragment : Fragment() {
             yearET.setText(year)
 
             buttonOk.setOnClickListener {
+                Log.e("filter", nameCountryET.text.toString())
                 val resultBundle = Bundle().apply {
                     putString("nameCountry" ,nameCountryET.text.toString())
                     putString("ageRating", ageRatingET.text.toString())

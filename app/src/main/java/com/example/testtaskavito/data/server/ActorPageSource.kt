@@ -8,7 +8,7 @@ import com.example.testtaskavito.data.toDomain
 import com.example.testtaskavito.domain.Actor
 import retrofit2.HttpException
 
-//сделать один общий
+// TODO: Класс почти одинаковый с ReviewPageSource, если успею, то надо завести общую часть
 class ActorPageSource (
     private val apiService: MoviesService,
     private val movieId: Int

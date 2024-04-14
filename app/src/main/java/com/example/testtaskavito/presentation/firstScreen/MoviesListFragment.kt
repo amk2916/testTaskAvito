@@ -1,10 +1,13 @@
 package com.example.testtaskavito.presentation.firstScreen
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -60,10 +63,15 @@ class MoviesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         component.inject(this)
 
+        val search = view.findViewById<EditText>(R.id.searchET)
+
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerFilms)
         val progress = view.findViewById<ProgressBar>(R.id.progress)
 
         val imageView = view.findViewById<ImageView>(R.id.filterImage)
+
+
 
         imageView.setOnClickListener {
             val fragment = FilterFragment.instance(nameCountry, year, ageRating)
@@ -90,6 +98,25 @@ class MoviesListFragment : Fragment() {
                     .collectLatest(moviesAdapter::submitData)
             }
         }
+
+
+
+
+        search.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                null
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.search(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                null
+            }
+
+        })
+
 
 
         Broacast.errorUpdates
