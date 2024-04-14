@@ -17,6 +17,7 @@ class ActorsAdapter : PagingDataAdapter<Actor, ActorViewHolder>(ActorDiffItemCal
         Picasso
             .get()
             .load(item?.photo)
+            .placeholder(R.drawable.no_data)
             .error(R.drawable.no_data)
             .into(holder.photo)
 

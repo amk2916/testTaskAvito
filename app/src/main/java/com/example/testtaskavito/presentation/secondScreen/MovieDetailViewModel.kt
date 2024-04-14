@@ -32,29 +32,37 @@ class MovieDetailViewModel @Inject constructor(
 ) : ViewModel(){
     private var idMovie = 0
 
-
-    private val _review: MutableSharedFlow<PagingData<Review>> = MutableSharedFlow(1, 1, onBufferOverflow = BufferOverflow.DROP_LATEST)
+    private val _review: MutableSharedFlow<PagingData<Review>> = MutableSharedFlow(
+        1,
+        1,
+        onBufferOverflow = BufferOverflow.DROP_LATEST
+    )
     val review: SharedFlow<PagingData<Review>> = _review.asSharedFlow()
        //newPagerReview().flow.stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
 
-    private val _actors: MutableStateFlow<PagingData<Actor>> = MutableStateFlow(PagingData.empty())
-    val actors: StateFlow<PagingData<Actor>> = MutableStateFlow(PagingData.empty())
+    private val _actors:  MutableSharedFlow<PagingData<Actor>> = MutableSharedFlow(
+        1,
+        1,
+        onBufferOverflow = BufferOverflow.DROP_LATEST
+    )
+
+    val actors: SharedFlow<PagingData<Actor>> = _actors.asSharedFlow()
        // newPagerActor().flow.stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
 
-    fun start(id: Int) {
+    private fun start(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            /*newPagerActor(id)
+            newPagerActor(id)
                 .flow
-                .collect{
-                    Log.e("TEST" ,"${it.toString()}")
-                    _actors.value = it }
-              //  .collect { actors.value = it }
-*/
+                .onEach{
+                    Log.e("TEST" ,"start: $it ")
+                    _actors.emit(it)
+                }
+                .launchIn(viewModelScope)
+
             newPagerReview(id)
                 .flow
-                .cachedIn(viewModelScope)
                 .onEach {
-                    Log.e("TAG", "start: $it ", )
+                    Log.e("TAG", "start: $it " )
                     _review.emit(it)
                 }
                 .launchIn(viewModelScope)
@@ -83,11 +91,13 @@ class MovieDetailViewModel @Inject constructor(
         this.idMovie = idMovie
         viewModelScope.launch {
             val movie1 =  queryGetMoviesUseCaseProvider.getMovieForID(idMovie)
+            start(idMovie)
             Log.e("emit", movie1.toString())
             isLoadingFlow.emit(false)
             movie.emit(
                movie1!!
             )
+
         }
     }
 }

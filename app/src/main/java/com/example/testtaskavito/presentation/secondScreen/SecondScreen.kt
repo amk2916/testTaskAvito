@@ -69,15 +69,7 @@ class SecondScreen : Fragment() {
             header = MoviesLoadStateAdapter()
         )
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.actors
-                   // .collectLatest(actorAdapter::submitData)
-            }
 
-         //   }
-
-        }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -88,15 +80,23 @@ class SecondScreen : Fragment() {
                         commentAdapter.submitData(it)
                     }
                     .launchIn(this)
+
+                viewModel.actors
+                    .onEach {
+                        Log.e("TAG", "onViewCreated: $it",)
+                        actorAdapter.submitData(it)
+                    }
+                    .launchIn(this)
             }
         }
+
 
         val poster = view.findViewById<ImageView>(R.id.posterView)
         val ratingKp = view.findViewById<TextView>(R.id.ratingKp)
         val ratingImdb = view.findViewById<TextView>(R.id.ratingImdb)
         val ratingTmdb = view.findViewById<TextView>(R.id.ratingTmdb)
-       // val filmDuration = view.findViewById<TextView>(R.id.filmDuration)
-       // val direction = view.findViewById<>()
+        val filmDuration = view.findViewById<TextView>(R.id.filmDuration)
+        val description = view.findViewById<TextView>(R.id.Description)
         val nameMovie = view.findViewById<TextView>(R.id.nameMovie)
 
 
@@ -111,42 +111,25 @@ class SecondScreen : Fragment() {
         viewModel.movie
             .onEach {
             nameMovie.text = it.nameFilm
+
             Picasso.get()
                 .load(it.posters)
                 .error(R.drawable.default_poster)
-                .resize(poster.width, poster.height)
                 .into(poster)
+
+                ratingKp.text = it.rating.kp.toString()
+                ratingImdb.text = it.rating.imdb.toString()
+                ratingTmdb.text = it.rating.tmdb.toString()
+                filmDuration.text = it.movieLength
+                description.text = it.description
+
         }.launchIn(lifecycleScope)
-        viewModel.start(idItem)
-        /*       val ratingKp = view.findViewById<TextView>(R.id.ratingKp)
-               val ratingImdb = view.findViewById<TextView>(R.id.ratingImdb)
-               val ratingTmdb = view.findViewById<TextView>(R.id.ratingTmdb)
-               val filmDuration = view.findViewById<TextView>(R.id.filmDuration)*/
+//        viewModel.start(idItem)
 
 
     }
 
-    private fun setupAdapterActor(recyclerView: RecyclerView) {
 
-
-//
-//
-//
-//        moviesAdapter = MoviesAdapter(displayMetrics, dimenCornerRatingTV)
-//        moviesAdapter.onClickListenerItem = {
-//            val fragment = SecondScreen.instance(it.id)
-//            parentFragmentManager
-//                .beginTransaction()
-//                .replace(R.id.fragmentContainer, fragment)
-//                .addToBackStack("")
-//                .commit()
-//        }
-//        recyclerView.adapter = moviesAdapter.withLoadStateHeaderAndFooter(
-//            footer = MoviesLoadStateAdapter(),
-//            header = MoviesLoadStateAdapter()
-//        )
-
-    }
 
 
     private fun parseParam() {
