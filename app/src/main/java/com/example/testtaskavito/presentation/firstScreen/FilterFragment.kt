@@ -35,6 +35,7 @@ class FilterFragment : Fragment() {
             val ageRatingET = findViewById<EditText>(R.id.ageRatingET)
             val yearET = findViewById<EditText>(R.id.yearET)
             val buttonOk = findViewById<Button>(R.id.okButton)
+            val buttonCancelFilters = findViewById<Button>(R.id.cancel_button)
 
             nameCountryET.setText(nameCountry)
             ageRatingET.setText(ageRating)
@@ -49,6 +50,12 @@ class FilterFragment : Fragment() {
                 }
                 parentFragmentManager.setFragmentResult("requestKey", resultBundle)
                 parentFragmentManager.popBackStack()
+            }
+
+            buttonCancelFilters.setOnClickListener {
+                nameCountryET.setText("")
+                ageRatingET.setText("")
+                yearET.setText("")
             }
         }
     }

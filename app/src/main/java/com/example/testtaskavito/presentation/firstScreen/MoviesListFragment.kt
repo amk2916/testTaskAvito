@@ -133,49 +133,40 @@ class MoviesListFragment : Fragment() {
             viewLifecycleOwner
         ) { requestKey, bundle ->
             Log.e("setFragmentResultListener", "1")
-            var nameCountryET = bundle.getString("nameCountry")
+            val nameCountryET = bundle.getString("nameCountry")
             val ageRatingET = bundle.getString("ageRating")
             val yearET = bundle.getString("year")
 
-            var newValueNameCountry = ""
-            var newValueAgeRating = ""
-            var newValueYear = ""
-
-            if (nameCountryET != null || nameCountryET != "") {
-                if (nameCountryET != null) {
-                    newValueNameCountry = nameCountryET
-                }
+            val newValueYear = if (yearET == null || yearET == "") {
+                null
+            } else {
+                yearET.toInt()
             }
-            if (ageRatingET != null || ageRatingET != "") {
-                if (ageRatingET != null) {
-                    newValueAgeRating = ageRatingET
-                }
-            }
-            if (yearET != null || yearET != "") {
-                if (yearET != null) {
-                    newValueYear = yearET
-                }
+            val newValueAgeRating = if (ageRatingET == null || ageRatingET == "") {
+                null
+            } else {
+                ageRatingET.toInt()
             }
 
-            if (newValueNameCountry != "" || newValueAgeRating != "" || newValueYear != "") {
-                if (newValueYear.toInt() != year || newValueAgeRating.toInt() != ageRating || newValueNameCountry != nameCountry) {
-                    nameCountry = if (newValueAgeRating.isEmpty()) null else newValueNameCountry
-                    year = newValueYear.toInt()
-                    ageRating = if (newValueAgeRating.isEmpty()) null else newValueAgeRating.toInt()
-                    viewModel.getWithFilter(nameCountry, ageRating, year)
-                }
+            val newValueNameCountry = if (nameCountryET == null || nameCountryET == "") {
+                null
+            } else {
+                nameCountryET
             }
 
+            if (newValueYear != year || newValueAgeRating != ageRating || newValueNameCountry != nameCountry) {
+                nameCountry = newValueNameCountry
+                year = newValueYear
+                ageRating = newValueAgeRating
+                viewModel.getWithFilter(nameCountry, ageRating, year)
+            }
 
         }
     }
 
-
     private fun setupAdapter(recyclerView: RecyclerView) {
         val dimenCornerRatingTV = resources.getDimension(R.dimen.cornerTextViewRating)
         val displayMetrics = resources.displayMetrics
-
-
 
         moviesAdapter = MoviesAdapter(displayMetrics, dimenCornerRatingTV)
         moviesAdapter.onClickListenerItem = {
@@ -196,21 +187,5 @@ class MoviesListFragment : Fragment() {
     companion object {
         fun instanceMoviesListFragment() = MoviesListFragment()
     }
-
-    override fun onPause() {
-        super.onPause()
-        Log.e("MoviesListFragment", "onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.e("MoviesListFragment", "OnStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.e("MoviesListFragment", "ondestroy")
-    }
-
 
 }

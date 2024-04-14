@@ -55,4 +55,12 @@
         android:layout_margin="10dp"
         android:text="Готово" />
 
+    <Button
+        android:id="@+id/cancel_button"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Снять фильтры" />
+
 </LinearLayout>
